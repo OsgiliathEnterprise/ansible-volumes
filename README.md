@@ -24,12 +24,12 @@ lvnames:
 Dependencies
 ------------
 
-As said, mrlesmithjr.ansible-manage-lvm
+As said, [mrlesmithjr.ansible-manage-lvm](https://github.com/mrlesmithjr/ansible-manage-lvm)
 
 Example Playbook
 ----------------
 
-See the [vars declared](molecule/default/molecule.yml) on the molecule test, as well as [their impact](molecule/default/tests/test_default.py) 
+See the [vars declared](https://github.com/OsgiliathEnterprise/ansible-manage-lvm-plus/blob/master/molecule/default/molecule.yml) on the molecule test, as well as [their impact](https://github.com/OsgiliathEnterprise/ansible-manage-lvm-plus/blob/master/molecule/default/tests/test_default.py) 
 
 License
 -------
