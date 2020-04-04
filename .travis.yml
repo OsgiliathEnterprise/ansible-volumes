@@ -1,6 +1,6 @@
 ---
-language: python
-python: "2.7"
+language: ruby
+python: "2.6"
 
 # Use the new container infrastructure
 sudo: false
@@ -12,6 +12,7 @@ addons:
     - python-pip
     - virtualbox
     - vagrant
+    - python
 env:
   global:
     - distroshortversion: fedora-31
@@ -22,7 +23,7 @@ install:
   - pip install ansible
   - pip install molecule-vagrant
   - pip install ansible-lint
-  - - pip install paramiko
+  - pip install paramiko
   # Check ansible version
   - ansible --version
   - vagrant add $distroshortversion
