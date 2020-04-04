@@ -10,14 +10,23 @@ addons:
   apt:
     packages:
     - python-pip
-
+    - virtualbox
+    - virtualbox-ext-pack
+    - vagrant
+env:
+  global:
+    - distroshortversion: fedora-31
 install:
   # Install ansible
+  - vagrant plugin install vagrant-vbguest
+  - vagrant plugin install vagrant-persistent-storage
   - pip install ansible
   - pip install molecule-vagrant
-
+  - pip install ansible-lint
+  - - pip install paramiko
   # Check ansible version
   - ansible --version
+  - vagrant add $distroshortversion
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=../' >ansible.cfg
