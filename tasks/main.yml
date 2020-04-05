@@ -15,5 +15,11 @@
     )
 
 - include: autoextends.yml
+  when: >
+    manage_lvm is defined and
+    manage_lvm
 
 - include: xfs.yml
+  when: >
+    manage_lvm is defined and
+    manage_lvm
