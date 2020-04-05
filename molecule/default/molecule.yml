@@ -38,6 +38,9 @@ provisioner:
                 metadata: non-persistent/thinpoolmeta
                 autoextendtreshold: 80
                 autoextendpercent: 20
+                filesystem2: xfs
+                mntp: /var/lib/docker
+                mount2: true
               - lvname: thinpoolmeta
                 size: 10%VG
                 opts: "--wipesignatures y"

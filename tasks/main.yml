@@ -15,3 +15,5 @@
     )
 
 - include: autoextends.yml
+
+- include: xfs.yml

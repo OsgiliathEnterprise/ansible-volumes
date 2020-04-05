@@ -21,6 +21,21 @@ lvnames:
   autoextendpercent: <number> # percentage of the autoextend profile
 ```
 
+And some xfs dedicated roles
+```
+lvnames:
+  ...
+  create: true
+  filesystem2: xfs # will format the logical volume using xfs
+```
+
+```
+lvnames:
+  ...
+  mntp: /var/lib/docker
+  mount2: true # will mount the xfs file system
+```
+
 Dependencies
 ------------
 

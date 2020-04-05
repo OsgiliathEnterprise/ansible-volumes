@@ -1,7 +1,7 @@
 ---
 # tasks file for thinpool autoextends
 
-- name: lvm | configure lvm autoextends
+- name: lvm_autoextends | configure lvm autoextends
   template:
     src: thinpool-profile.j2
     dest: /etc/lvm/profile/{{ item.0.vgname }}-{{ item.1.lvname }}.profile
@@ -19,7 +19,7 @@
     )
     )
 
-- name: lvm | convert thinpool
+- name: lvm_autoextends | convert thinpool
   shell: lvchange --metadataprofile {{ item.0.vgname }}-{{ item.1.lvname }} {{ item.0.vgname }}/{{ item.1.lvname }}
   become: yes
   loop: "{{ lvm_groups|subelements('lvnames') }}"

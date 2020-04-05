@@ -34,5 +34,13 @@ def test_thinpool_is_monitored(host):
     command = """sudo lvs -o+seg_monitor | grep -c 'monitored'"""
     cmd = host.run(command)
     assert '1' in cmd.stdout
-
 # Don't know how to test autoextend
+
+def test_formating_is_xfs(host):
+    command = """sudo xfs_info /dev/non-persistent/thinpool | grep -c 'ftype=1'"""
+    cmd = host.run(command)
+    assert '1' in cmd.stdout
+
+def test_xfs_volume_is_mounted(host):
+    host.file("/var/lib/docker").mode == 0o731
+
