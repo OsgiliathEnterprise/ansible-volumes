@@ -21,12 +21,33 @@
     )
     )
 
+- name: lvm | check already converted
+  loop: "{{ lvm_groups|subelements('lvnames') }}"
+  shell: "xfs_info /dev/{{ item.0.vgname }}/{{ item.1.lvname }} | grep -c 'ftype=1'"
+  become: yes
+  register: alreadyformattedresult
+  ignore_errors: True
+  when: >
+    (
+    (item.1 is defined and item.1 != 'None') and
+    (
+    item.1.filesystem2 is defined and
+    item.1.filesystem2 == "xfs"
+    )
+    and
+    (
+    item.1.create is defined and
+    item.1.create
+    )
+    )
+
 - name: lvm_xfs | format in xfs
   loop: "{{ lvm_groups|subelements('lvnames') }}"
-  shell: mkfs.xfs /dev/{{ item.0.vgname }}/{{ item.1.lvname }}
+  command: mkfs.xfs /dev/{{ item.0.vgname }}/{{ item.1.lvname }}
   become: yes
   when: >
     (
+    alreadyformattedresult is failed and
     (item.1 is defined and item.1 != 'None') and
     (
     item.1.filesystem2 is defined and

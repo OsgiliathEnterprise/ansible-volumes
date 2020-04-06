@@ -36,6 +36,8 @@ lvnames:
   mount2: true # will mount the xfs file system
 ```
 
+Limitation: this role isn't idempotent: if you execute it twice it will create the thinpool a second time (but don't be a blocker)
+
 Dependencies
 ------------
 
@@ -49,7 +51,7 @@ See the [vars declared](https://github.com/OsgiliathEnterprise/ansible-manage-lv
 License
 -------
 
-Apache-2
+[Apache-2](https://www.apache.org/licenses/LICENSE-2.0)
 
 Author Information
 ------------------

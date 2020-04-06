@@ -20,7 +20,7 @@
     )
 
 - name: lvm_autoextends | convert thinpool
-  shell: lvchange --metadataprofile {{ item.0.vgname }}-{{ item.1.lvname }} {{ item.0.vgname }}/{{ item.1.lvname }}
+  command: lvchange --metadataprofile {{ item.0.vgname }}-{{ item.1.lvname }} {{ item.0.vgname }}/{{ item.1.lvname }}
   become: yes
   loop: "{{ lvm_groups|subelements('lvnames') }}"
   when: >
