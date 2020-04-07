@@ -16,7 +16,7 @@ platforms:
       - lvm
     provider_override_args:
       - "persistent_storage.enabled = true"
-      - "persistent_storage.location = 'testhdd.vdi'"
+      - "persistent_storage.location = 'molecule-lvm.vdi'"
       - "persistent_storage.size = 100"
       - "persistent_storage.mount = false"
       - "persistent_storage.diskdevice = '/dev/sdb'"
