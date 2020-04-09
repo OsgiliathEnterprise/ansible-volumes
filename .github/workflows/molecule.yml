@@ -25,13 +25,9 @@ jobs:
 
     - name: install lint prerequisite
       run: |
-        sudo apt -y install python3-setuptools
-        pip3 install wheel
-        pip3 install ansible-lint
+        sudo apt -y install python3-setuptools ansible-lint
 
     - name: lint ansible
-      env:
-        PATH: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
       run: |
         ansible-lint
   requirements:
