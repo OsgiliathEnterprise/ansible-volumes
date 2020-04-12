@@ -4,4 +4,4 @@
   tasks:
     - name: "Include lvm"
       include_role:
-        name: "lvm"
+        name: "ansible-manage-lvm-plus"
