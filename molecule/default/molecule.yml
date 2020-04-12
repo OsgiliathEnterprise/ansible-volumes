@@ -22,6 +22,8 @@ platforms:
       - "persistent_storage.diskdevice = '/dev/sdb'"
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: ../../..:../../../community
   inventory:
     group_vars:
       lvm:
