@@ -8,28 +8,32 @@ Role Variables
 --------------
 
 In addition to the [usual variables](https://github.com/mrlesmithjr/ansible-manage-lvm/blob/master/README.md), you can declare some more.
-```
+```yaml
+---
 lvnames:
   ...
   metadata: <another lvname> # declares the metadata logical volume 
 ```
 
-```
+```yaml
+---
 lvnames:
   ...
-  autoextendtreshold: <number> # treshold of the autoextend profile
+  autoextendtreshold: <number> # threshold of the autoextend profile
   autoextendpercent: <number> # percentage of the autoextend profile
 ```
 
 And some xfs dedicated roles
-```
+```yaml
+---
 lvnames:
   ...
   create: true
   filesystem2: xfs # will format the logical volume using xfs
 ```
 
-```
+```yaml
+---
 lvnames:
   ...
   mntp: /var/lib/docker
@@ -56,6 +60,6 @@ License
 Author Information
 ------------------
 
-Twitter [@tcharl](https://twitter.com/Tcharl)
-Github [@tcharl](https://github.com/Tcharl)
-LinkedIn [Charlie Mordant](https://www.linkedin.com/in/charlie-mordant-51796a97/)
+* Twitter [@tcharl](https://twitter.com/Tcharl)
+* Github [@tcharl](https://github.com/Tcharl)
+* LinkedIn [Charlie Mordant](https://www.linkedin.com/in/charlie-mordant-51796a97/)
