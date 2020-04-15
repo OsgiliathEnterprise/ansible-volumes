@@ -4,31 +4,35 @@
 - name: lvm_autoextends | configure lvm autoextends
   template:
     src: thinpool-profile.j2
-    dest: /etc/lvm/profile/{{ item.0.vgname }}-{{ item.1.lvname }}.profile
+    dest: /etc/lvm/profile/{{ vg.vgname }}-{{ lv.lvname }}.profile
     owner: root
     group: root
   become: yes
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
+  loop: "{{ vg.lvnames }}"
+  loop_control:
+    loop_var: lv
   when: >
     (
-    (item.1 is defined and
-    item.1 != 'None') and
+    (lv is defined and
+    lv != 'None') and
     (
-    item.1.autoextendtreshold is defined and
-    item.1.autoextendpercent is defined
+    lv.autoextendtreshold is defined and
+    lv.autoextendpercent is defined
     )
     )
 
-- name: lvm_autoextends | convert thinpool
-  command: lvchange --metadataprofile {{ item.0.vgname }}-{{ item.1.lvname }} {{ item.0.vgname }}/{{ item.1.lvname }}
+- name: lvm_autoextends | apply metadata profile
+  command: lvchange --metadataprofile {{ vg.vgname }}-{{ lv.lvname }} {{ vg.vgname }}/{{ lv.lvname }}
   become: yes
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
+  loop: "{{ vg.lvnames }}"
+  loop_control:
+    loop_var: lv
   when: >
     (
-    (item.1 is defined and
-    item.1 != 'None') and
+    (lv is defined and
+    lv != 'None') and
     (
-    item.1.autoextendtreshold is defined and
-    item.1.autoextendpercent is defined
+    lv.autoextendtreshold is defined and
+    lv.autoextendpercent is defined
     )
     )

@@ -7,7 +7,7 @@ driver:
   name: vagrant
   provider:
     name: libvirt
-lint: yamllint
+lint: yamllint . && flake8 && ansible-lint --exclude=meta
 platforms:
   - name: Fedora-Molecule-LVM
     box: bento/fedora-31
@@ -48,11 +48,9 @@ provisioner:
                 opts: "--wipesignatures y"
                 create: true
         manage_lvm: true
-  lint: ansible-lint
 verifier:
   name: testinfra
   env:
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
     v: 1
-  lint: flake8
