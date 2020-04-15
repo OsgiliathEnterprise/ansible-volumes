@@ -7,8 +7,31 @@
   become: yes
   register: metadataalreadycreatedresult
   ignore_errors: True
+  changed_when: no
   when: >
     (
+    (
+    manage_lvm is defined and
+    manage_lvm
+    ) and
+    (
+    item.1 is defined and
+    item.1 != 'None'
+    ) and
+    (item.1.metadata is defined)
+    )
+
+- name: manage_lvm | unmounting filesystem(s) brfore converying to thinpool
+  mount:
+    path: "{{ item.1.mntp }}"
+    src: "/dev/{{ item.0.vgname }}/{{ item.1.lvname }}"
+    fstype: "{{ lv.filesystem | default(omit) }}"
+    state: "absent"
+  become: true
+  loop: "{{ lvm_groups|subelements('lvnames') }}"
+  when: >
+    (
+    metadataalreadycreatedresult is failed and
     (
     manage_lvm is defined and
     manage_lvm
@@ -38,12 +61,33 @@
     (item.1.metadata is defined)
     )
 
-- include: autoextends.yml
+- name: manage_lvm | mounting new filesystem(s) after thinpool conversion
+  mount:
+    path: "{{ item.1.mntp }}"
+    src: "/dev/{{ item.0.vgname }}/{{ item.1.lvname }}"
+    fstype: "{{ item.1.filesystem }}"
+    state: "mounted"
+    opts: "{{ item.1.mopts | default('defaults') }}"
+  become: true
+  loop: "{{ lvm_groups|subelements('lvnames') }}"
   when: >
+    (
+    metadataalreadycreatedresult is failed and
+    (
     manage_lvm is defined and
     manage_lvm
+    ) and
+    (
+    item.1 is defined and
+    item.1 != 'None'
+    ) and
+    (item.1.metadata is defined)
+    )
 
-- include: xfs.yml
+- include: autoextends.yml
+  loop: "{{ lvm_groups }}"
+  loop_control:
+    loop_var: vg
   when: >
     manage_lvm is defined and
     manage_lvm
