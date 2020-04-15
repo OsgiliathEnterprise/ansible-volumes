@@ -21,11 +21,11 @@
     (item.1.metadata is defined)
     )
 
-- name: manage_lvm | unmounting filesystem(s) brfore converying to thinpool
+- name: manage_lvm | unmounting filesystem(s) before converying to thinpool
   mount:
     path: "{{ item.1.mntp }}"
     src: "/dev/{{ item.0.vgname }}/{{ item.1.lvname }}"
-    fstype: "{{ lv.filesystem | default(omit) }}"
+    fstype: "{{ item.1.filesystem | default(omit) }}"
     state: "absent"
   become: true
   loop: "{{ lvm_groups|subelements('lvnames') }}"
@@ -40,7 +40,9 @@
     item.1 is defined and
     item.1 != 'None'
     ) and
-    (item.1.metadata is defined)
+    (item.1.metadata is defined and
+    item.1.mntp is defined
+    )
     )
 
 - name: lvm | convert thinpool
@@ -81,7 +83,9 @@
     item.1 is defined and
     item.1 != 'None'
     ) and
-    (item.1.metadata is defined)
+    (item.1.metadata is defined and
+        item.1.mntp is defined
+        )
     )
 
 - include: autoextends.yml
