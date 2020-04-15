@@ -50,7 +50,7 @@ As said, [mrlesmithjr.ansible-manage-lvm](https://github.com/mrlesmithjr/ansible
 Example Playbook
 ----------------
 
-See the [vars declared](https://github.com/OsgiliathEnterprise/ansible-manage-lvm-plus/blob/master/molecule/default/molecule.yml) on the molecule test, as well as [their impact](https://github.com/OsgiliathEnterprise/ansible-manage-lvm-plus/blob/master/molecule/default/tests/test_default.py) 
+See the [vars declared](https://github.com/OsgiliathEnterprise/ansible-volumes/blob/master/molecule/default/molecule.yml) on the molecule test, as well as [their impact](https://github.com/OsgiliathEnterprise/ansible-manage-lvm-plus/blob/master/molecule/default/tests/test_default.py) 
 
 License
 -------
