@@ -32,7 +32,8 @@ jobs:
         sudo apt update
         sudo apt -y install python3-setuptools python3 python3-pip docker
         sudo pip3 install wheel
-        sudo pip3 install docker molecule testinfra yamllint ansible-lint flake8
+        sudo pip3 install docker molecule testinfra yamllint ansible-lint flake8 molecule-vagrant
+      # last one to have the linter works correctly!
 
     - name: molecule lint
       run: |
@@ -61,7 +62,7 @@ jobs:
     # run: |
     # echo XKBLAYOUT='us' > /etc/default/keyboard
 
-    - name: install virtualization stack
+    - name: refresh repositories
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
