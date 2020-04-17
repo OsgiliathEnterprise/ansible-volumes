@@ -94,10 +94,8 @@ jobs:
         pip3 install netaddr python-vagrant yamllint testinfra flake8
         pip3 install ansible ansible-lint
         pip3 install -I molecule molecule-vagrant
+        export PATH=/home/runner/.local/bin:$PATH
 
     - name: test molecule on vm
-      env:
-        LC_ALL: C.UTF-8
-        LANG: C.UTF-8
       run: |
         molecule test --scenario-name kvm
