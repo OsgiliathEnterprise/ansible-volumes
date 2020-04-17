@@ -93,7 +93,7 @@ jobs:
         pip3 install wheel
         pip3 install netaddr python-vagrant yamllint testinfra flake8
         pip3 install ansible ansible-lint
-        pip3 install molecule molecule-vagrant
+        pip3 install -I molecule molecule-vagrant
 
     - name: test molecule on vm
       env:
