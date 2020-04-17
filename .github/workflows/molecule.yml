@@ -76,7 +76,8 @@ jobs:
       run: |
         sudo apt -y install bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
         export PATH=/home/runner/.local/bin:$PATH
-        echo "export PATH=/home/runner/.local/bin:$PATH" > ~/.bashrc
+        echo "export PATH=/home/runner/.local/bin:$PATH" > ~/.bash_profile
+        source ~/.bash_profile
 
     - name: install vagrant
       env:
