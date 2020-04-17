@@ -91,7 +91,9 @@ jobs:
         sudo apt-get update && sudo apt-get install -y ca-certificates curl gcc iproute2 python3 python3-dev sudo
         curl -skL https://bootstrap.pypa.io/get-pip.py | sudo -H python3
         pip3 install wheel
-        pip3 install molecule netaddr python-vagrant yamllint molecule-vagrant testinfra yamllint ansible-lint flake8
+        pip3 install netaddr python-vagrant yamllint testinfra flake8
+        pip3 install ansible ansible-lint
+        pip3 install molecule molecule-vagrant
 
     - name: test molecule on vm
       env:
