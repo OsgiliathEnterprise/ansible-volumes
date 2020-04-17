@@ -75,6 +75,8 @@ jobs:
     - name: install virtualization stack
       run: |
         sudo apt -y install bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
+        export PATH=/home/runner/.local/bin:$PATH
+        echo "export PATH=/home/runner/.local/bin:$PATH" > ~/.bashrc
 
     - name: install vagrant
       env:
@@ -94,7 +96,6 @@ jobs:
         pip3 install netaddr python-vagrant yamllint testinfra flake8
         pip3 install ansible ansible-lint
         pip3 install -I molecule molecule-vagrant
-        export PATH=/home/runner/.local/bin:$PATH
 
     - name: test molecule on vm
       run: |
