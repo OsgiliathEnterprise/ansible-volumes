@@ -11,7 +11,7 @@ driver:
 lint: yamllint . && flake8 && ansible-lint --exclude=meta
 platforms:
   - name: Fedora-Molecule-LVM
-    box: bento/fedora-31
+    box: fedora/fedora-31-cloud-base
     # box-url: ${platform_root}/packer/bento/builds/fedora-31-x86_64.virtualbox.box
     provider_override_args:
       - "persistent_storage.enabled = true"
