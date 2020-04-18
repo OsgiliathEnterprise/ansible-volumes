@@ -98,4 +98,4 @@ jobs:
 
     - name: test molecule on vm
       run: |
-        PATH=/home/runner/.local/bin:$PATH bash -c 'molecule test --scenario-name kvm'
+        PATH=/home/runner/.local/bin:$PATH bash -c 'sudo molecule test --scenario-name kvm'
