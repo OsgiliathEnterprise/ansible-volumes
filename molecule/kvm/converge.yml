@@ -1,7 +1,1 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include lvm"
-      include_role:
-        name: "ansible-volumes"
+../default/converge.yml

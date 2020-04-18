@@ -24,6 +24,14 @@
             create: true
     manage_lvm: true
   tasks:
+    - name: Display dev
+      command: "ls /dev"
+      changed_when: false
+      register: result
+
+    - debug:
+        var: result
+
     - name: "Include lvm"
       include_role:
         name: "ansible-volumes"
