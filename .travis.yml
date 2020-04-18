@@ -22,8 +22,8 @@ before_install:
     sudo pip3 install netaddr python-vagrant yamllint testinfra flake8
     sudo pip3 install ansible ansible-lint
     sudo pip3 install -I molecule molecule-vagrant
-    echo $PATH
+    sudo echo $PATH
 
 script:
   - |
-    PATH=/home/runner/.local/bin:$PATH bash -c 'sudo molecule test --scenario-name kvm'
+    PATH=/home/travis/.local/bin:$PATH bash -c 'sudo molecule test --scenario-name kvm'
