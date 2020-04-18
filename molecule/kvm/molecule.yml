@@ -2,7 +2,8 @@
 dependency:
   name: galaxy
   options:
-    role-file: ../../meta/main.yml
+    role-file: requirements.yml
+    roles-path: ../community
 driver:
   name: vagrant
   provider:
@@ -22,6 +23,7 @@ provisioner:
   name: ansible
   env:
     ANSIBLE_ROLES_PATH: ../../..:../../../community
+
 verifier:
   name: testinfra
   env:
