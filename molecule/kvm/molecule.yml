@@ -21,6 +21,10 @@ platforms:
       - "persistent_storage.diskdevice = '/dev/sdb'"
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      localhost:
+        ansible_python_interpreter: /usr/bin/python3
   env:
     ANSIBLE_ROLES_PATH: ../../..:../../../community
 
