@@ -31,7 +31,6 @@
 
     - debug:
         var: result
-        verbosity: 2
 
     - name: "Include lvm"
       include_role:
