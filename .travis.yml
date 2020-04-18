@@ -2,7 +2,9 @@
 
 dist: bionic
 
-language: minimal
+language: python
+python:
+  - "3.7"
 
 before_install:
   - |
