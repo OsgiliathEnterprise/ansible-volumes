@@ -28,4 +28,4 @@ before_install:
 
 script:
   - |
-    PATH=/home/travis/.local/bin:$PATH bash -c 'sudo molecule test --scenario-name kvm'
+    sudo molecule test --scenario-name kvm
