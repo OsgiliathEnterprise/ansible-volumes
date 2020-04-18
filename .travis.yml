@@ -24,7 +24,7 @@ before_install:
     sudo pip3 install netaddr python-vagrant yamllint testinfra flake8
     sudo pip3 install ansible ansible-lint
     sudo pip3 install -I molecule molecule-vagrant
-    sudo echo $PATH
+    sudo ls /dev
 
 script:
   - |
