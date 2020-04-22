@@ -16,7 +16,7 @@ platforms:
     cpu: 2
     memory: 2048
     provider_raw_config_args:
-      - "storage :file, :size => '1G', :device => 'sdb'"
+      - "storage :file, :size => '1G', :device => 'vdb'"
 provisioner:
   name: ansible
   config_options:
