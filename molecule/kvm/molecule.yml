@@ -16,8 +16,8 @@ platforms:
     memory: 2048
     # box-url: ${platform_root}/packer/bento/builds/fedora-31-x86_64.virtualbox.box
     provider_override_args:
-      - "uri = 'qemu:///system'"
-      - "qemu_use_session = false"
+      - "libvirt.uri = 'qemu:///system'"
+      - "libvirt.qemu_use_session = false"
       - "persistent_storage.enabled = true"
       - "persistent_storage.location = 'molecule-lvm.vdi'"
       - "persistent_storage.size = 100"
