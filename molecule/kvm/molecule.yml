@@ -15,20 +15,13 @@ platforms:
     cpu: 2
     memory: 2048
     # box-url: ${platform_root}/packer/bento/builds/fedora-31-x86_64.virtualbox.box
-    provider_override_args:
-      - "libvirt.uri = 'qemu:///system'"
-      - "libvirt.qemu_use_session = false"
-      - "persistent_storage.enabled = true"
-      - "persistent_storage.location = 'molecule-lvm.vdi'"
-      - "persistent_storage.size = 100"
-      - "persistent_storage.mount = false"
-      - "persistent_storage.diskdevice = '/dev/sdb'"
+    instance_raw_config_args:
+      - |
+        vm.provider :libvirt do |libvirt|
+          libvirt.storage :file, :size => '1G', :device => 'sdb'
+        end
 provisioner:
   name: ansible
-  inventory:
-    host_vars:
-      localhost:
-        ansible_python_interpreter: /usr/bin/python3
   config_options:
     defaults:
       forks: 20
@@ -42,4 +35,4 @@ verifier:
   env:
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
-    v: 1
+    v: 3
