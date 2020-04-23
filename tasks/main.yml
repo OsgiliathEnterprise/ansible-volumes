@@ -6,7 +6,7 @@
   shell: "lvs -o metadata_lv  {{ item.0.vgname }} --separator='|' --noheadings | grep -c '{{ item.1.lvname }}_tmeta'"
   become: yes
   register: metadataalreadycreatedresult
-  ignore_errors: True
+  ignore_errors: true
   changed_when: no
   when: >
     (

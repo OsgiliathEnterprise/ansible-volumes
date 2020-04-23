@@ -12,6 +12,8 @@ lint: yamllint . && flake8 && ansible-lint --exclude=meta
 platforms:
   - name: Fedora-Molecule-LVM
     box: fedora/31-cloud-base
+    cpu: 2
+    memory: 2048
     provider_override_args:
       - "persistent_storage.enabled = true"
       - "persistent_storage.location = 'molecule-lvm.vdi'"
