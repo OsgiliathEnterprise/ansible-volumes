@@ -33,3 +33,19 @@ verifier:
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
     v: 3
+scenario:
+  name: kvm
+  test_sequence:
+    - lint
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+ #   - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
