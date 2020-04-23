@@ -8,10 +8,9 @@ driver:
   name: vagrant
   provider:
     name: libvirt
-
 lint: yamllint . && flake8 && ansible-lint --exclude=meta
 platforms:
-  - name: Fedora-Molecule-LVM
+  - name: Fedora-Molecule-Volumes-KVM
     box: fedora/31-cloud-base
     cpu: 2
     memory: 2048
@@ -32,7 +31,7 @@ verifier:
   env:
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
-    v: 3
+    v: 1
 scenario:
   name: kvm
   test_sequence:
