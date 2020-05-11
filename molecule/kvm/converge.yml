@@ -7,7 +7,7 @@
         disks:
           - /dev/vdb
         create: true
-        lvnames:
+        lvmetanames:
           - lvname: thinpool
             size: 40%VG
             opts: "--wipesignatures y"
