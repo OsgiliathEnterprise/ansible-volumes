@@ -1,27 +1,68 @@
 ---
 
-- name: ansible-volumes | check already converted
+- name: ansible-volumes | check {{ avlv.lvname }} already converted
   shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
-  become: yes
+  become: true
   register: alreadyhasmetadata
   ignore_errors: true
   changed_when: no
-  when: avlv.metadata is defined
+
+- name: ansible-volumes | debug alreadyhasmetadata variable
+  debug:
+    var: alreadyhasmetadata
+    verbosity: 1
+
+- name: ansible-volumes | find if {{ avlv.lvname }} already converted to metadata pool
+  shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlvwithmeta.lvname }}_tmeta'"
+  loop: "{{ avvg.lvmetanames }}"
+  loop_control:
+    loop_var: avlvwithmeta
+  register: alreadyaremetadata
+  ignore_errors: true
+  become: true
+  changed_when: no
+  when:
+    not avlv.metadata is defined and
+    (avlvwithmeta.metadata is defined and
+    avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
+    )
+
+- name: ansible-volumes | debug alreadyaremetadata variable
+  debug:
+    var: alreadyaremetadata
+    verbosity: 1
+  when: >
+    alreadyaremetadata is defined
 
 - name: ansible-volumes | include manage_lvm role
   include_role:
     name: tcharl.ansible_manage_lvm
   vars:
     lvm_groups:
-      - vgname: "{{ avvg.vgname}}"
+      - vgname: "{{ avvg.vgname }}"
         disks: "{{ avvg.disks }}"
         create: "{{ avvg.create }}"
         lvnames:
           - lvname: "{{ avlv.lvname }}"
             size: "{{ avlv.size }}"
-            opts: "{{ avlv.opts }}"
+            opts: "{{ avlv.opts | default(omit) }}"
             create: "{{ avlv.create }}"
-            filesystem: "{{ avlv.filesystem }}"
-            mntp: "{{ avlv.mntp }}"
-            mount: "{{ avlv.mount }}"
-  when: alreadyhasmetadata is failed
+            filesystem: "{{ avlv.filesystem | default('None') }}"
+            mntp: "{{ avlv.mntp  | default(omit) }}"
+            mount: "{{ avlv.mount  | default(false) }}"
+  loop: "{{ alreadyaremetadata.results }}"
+  loop_control:
+    loop_var: alreadyismetadata
+  when: >
+    (alreadyhasmetadata is failed or alreadyhasmetadata.rc == 1 or alreadyhasmetadata.stdout == 0) and
+    (
+    avlv.metadata is defined or
+    (
+    not alreadyismetadata.skipped is defined and
+    (
+    alreadyismetadata is failed or
+    alreadyismetadata.rc == 1 or
+    alreadyismetadata.stdout == 0
+    )
+    )
+    )

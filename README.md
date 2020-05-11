@@ -12,23 +12,58 @@ It add the ability to create thinpools and their associated metadata
 Role Variables
 --------------
 
-In addition to the [usual variables](https://github.com/mrlesmithjr/ansible-manage-lvm/blob/master/README.md), you can declare some more.
+In addition to the [usual variables](https://github.com/mrlesmithjr/ansible-manage-lvm/blob/master/README.md), you can declare some more in order to configure thinpools
+
 ```yaml
 ---
-lvnames:
+lvmetanames:
   ...
   metadata: <another lvname> # declares the metadata logical volume 
 ```
 
 ```yaml
 ---
-lvnames:
+lvmetanames:
   ...
   autoextendtreshold: <number> # threshold of the autoextend profile
   autoextendpercent: <number> # percentage of the autoextend profile
 ```
 
-Limitation: this role isn't idempotent: if you execute it twice it will create the thinpool a second time (but don't be a blocker)
+Full example
+```yaml
+---
+  vars:
+    lvm_groups:
+      - vgname: myvg
+        disks:
+          - /dev/sdb1
+        create: true
+        lvnames:
+          - lvname: notathinpool # original role
+            size: 40%VG
+            opts: "" 
+            create: true
+            filesystem: xfs
+            mntp: /var/stuff
+            mount: true
+        lvmetanames:
+          - lvname: thinpool
+            size: 40%VG
+            opts: "--wipesignatures y"
+            create: true
+            metadata: myvg/thinpoolmeta
+            autoextendtreshold: 80
+            autoextendpercent: 20
+            filesystem: xfs
+            mntp: /var/lib/docker
+            mount: true
+          - lvname: thinpoolmeta
+            size: 10%VG
+            opts: "--wipesignatures y"
+            create: true
+    manage_lvm: true
+```
+
 
 Dependencies
 ------------

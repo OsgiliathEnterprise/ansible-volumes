@@ -1,5 +1,17 @@
 ---
 # tasks file for lvm
+- name: ansible-volumes | include manage_lvm role | centos
+  include_role:
+    name: tcharl.ansible_manage_lvm
+    tasks_from: centos
+  when: ansible_os_family == "RedHat"
+
+- name: ansible-volumes | include manage_lvm role | deb
+  include_role:
+    name: tcharl.ansible_manage_lvm
+    tasks_from: debian
+  when: ansible_os_family == "Debian"
+
 - name: ansible-volumes | create volume for each lv
   include_tasks: lv.yml
   loop: "{{ avvg.lvmetanames }}"

@@ -22,7 +22,8 @@
     )
 
 - name: lvm_autoextends | apply metadata profile
-  command: lvchange --metadataprofile {{ vg.vgname }}-{{ avlv.lvname }} {{ avvg.vgname }}/{{ avlv.lvname }}
+  command: lvchange --metadataprofile {{ avvg.vgname }}-{{ avlv.lvname }} {{ avvg.vgname }}/{{ avlv.lvname }}
+  changed_when: false
   become: yes
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
