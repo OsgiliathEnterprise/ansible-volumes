@@ -1,0 +1,50 @@
+---
+# tasks file for lvm
+- name: ansible-volumes | debug vg variable
+  debug:
+    var: avvg
+    verbosity: 1
+
+- name: ansible-volumes | debug lv variable
+  debug:
+    var: avlv
+    verbosity: 1
+
+- name: ansible-volumes | check already converted
+  shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
+  become: yes
+  register: metadataalreadybound
+  ignore_errors: true
+  changed_when: no
+
+- name: ansible-volumes | unmounting filesystem(s) before converting to thinpool
+  mount:
+    path: "{{ avlv.mntp }}"
+    src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
+    fstype: "{{ avlv.filesystem | default(omit) }}"
+    state: "absent"
+  become: true
+  when: >
+    (
+    metadataalreadybound is failed and
+    (avlv.mntp is defined)
+    )
+
+- name: ansible-volumes | convert thinpool
+  command: lvconvert -y --zero n -c 512K --thinpool {{ avvg.vgname }}/{{ avlv.lvname }} --poolmetadata {{ avlv.metadata }}
+  become: yes
+  when: metadataalreadybound is failed
+
+- name: ansible-volumes | mounting new filesystem(s) after thinpool conversion
+  mount:
+    path: "{{ avlv.mntp }}"
+    src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
+    fstype: "{{ avlv.filesystem }}"
+    state: "mounted"
+    opts: "{{ avlv.mopts | default('defaults') }}"
+  become: true
+  when: >
+    (
+    metadataalreadybound is failed and
+    (avlv.mntp is defined)
+    )

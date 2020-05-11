@@ -1,97 +1,19 @@
 ---
 # tasks file for lvm
 
-- name: lvm | check already converted
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
-  shell: "lvs -o metadata_lv  {{ item.0.vgname }} --separator='|' --noheadings | grep -c '{{ item.1.lvname }}_tmeta'"
-  become: yes
-  register: metadataalreadycreatedresult
-  ignore_errors: true
-  changed_when: no
+- name: ansible-volumes | loop over vgs
+  include_tasks: vg.yml
+  loop: "{{ lvm_groups }}"
+  loop_control:
+    loop_var: avvg
   when: >
-    (
-    (
     manage_lvm is defined and
     manage_lvm
-    ) and
-    (
-    item.1 is defined and
-    item.1 != 'None'
-    ) and
-    (item.1.metadata is defined)
-    )
-
-- name: manage_lvm | unmounting filesystem(s) before converying to thinpool
-  mount:
-    path: "{{ item.1.mntp }}"
-    src: "/dev/{{ item.0.vgname }}/{{ item.1.lvname }}"
-    fstype: "{{ item.1.filesystem | default(omit) }}"
-    state: "absent"
-  become: true
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
-  when: >
-    (
-    metadataalreadycreatedresult is failed and
-    (
-    manage_lvm is defined and
-    manage_lvm
-    ) and
-    (
-    item.1 is defined and
-    item.1 != 'None'
-    ) and
-    (item.1.metadata is defined and
-    item.1.mntp is defined
-    )
-    )
-
-- name: lvm | convert thinpool
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
-  command: lvconvert -y --zero n -c 512K --thinpool {{ item.0.vgname }}/{{ item.1.lvname }} --poolmetadata {{ item.1.metadata }}
-  become: yes
-  when: >
-    (
-    metadataalreadycreatedresult is failed and
-    (
-    manage_lvm is defined and
-    manage_lvm
-    ) and
-    (
-    item.1 is defined and
-    item.1 != 'None'
-    ) and
-    (item.1.metadata is defined)
-    )
-
-- name: manage_lvm | mounting new filesystem(s) after thinpool conversion
-  mount:
-    path: "{{ item.1.mntp }}"
-    src: "/dev/{{ item.0.vgname }}/{{ item.1.lvname }}"
-    fstype: "{{ item.1.filesystem }}"
-    state: "mounted"
-    opts: "{{ item.1.mopts | default('defaults') }}"
-  become: true
-  loop: "{{ lvm_groups|subelements('lvnames') }}"
-  when: >
-    (
-    metadataalreadycreatedresult is failed and
-    (
-    manage_lvm is defined and
-    manage_lvm
-    ) and
-    (
-    item.1 is defined and
-    item.1 != 'None'
-    ) and
-    (item.1.metadata is defined and
-        item.1.mntp is defined
-        )
-    )
 
 - include: autoextends.yml
   loop: "{{ lvm_groups }}"
   loop_control:
-    loop_var: vg
+    loop_var: avvg
   when: >
     manage_lvm is defined and
     manage_lvm

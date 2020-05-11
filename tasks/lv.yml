@@ -1,0 +1,27 @@
+---
+
+- name: ansible-volumes | check already converted
+  shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
+  become: yes
+  register: alreadyhasmetadata
+  ignore_errors: true
+  changed_when: no
+  when: avlv.metadata is defined
+
+- name: ansible-volumes | include manage_lvm role
+  include_role:
+    name: tcharl.ansible_manage_lvm
+  vars:
+    lvm_groups:
+      - vgname: "{{ avvg.vgname}}"
+        disks: "{{ avvg.disks }}"
+        create: "{{ avvg.create }}"
+        lvnames:
+          - lvname: "{{ avlv.lvname }}"
+            size: "{{ avlv.size }}"
+            opts: "{{ avlv.opts }}"
+            create: "{{ avlv.create }}"
+            filesystem: "{{ avlv.filesystem }}"
+            mntp: "{{ avlv.mntp }}"
+            mount: "{{ avlv.mount }}"
+  when: alreadyhasmetadata is failed

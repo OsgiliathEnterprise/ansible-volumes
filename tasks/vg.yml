@@ -1,0 +1,15 @@
+---
+# tasks file for lvm
+- name: ansible-volumes | create volume for each lv
+  include_tasks: lv.yml
+  loop: "{{ avvg.lvmetanames }}"
+  loop_control:
+    loop_var: avlv
+  when: avlv is defined and avlv != 'None'
+
+- name: ansible-volumes | create pool for each lv
+  include_tasks: pool.yml
+  loop: "{{ avvg.lvmetanames }}"
+  loop_control:
+    loop_var: avlv
+  when: avlv is defined and avlv != 'None' and avlv.metadata is defined
