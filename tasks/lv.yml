@@ -21,7 +21,7 @@
   ignore_errors: true
   become: true
   changed_when: no
-  when:
+  when: >
     not avlv.metadata is defined and
     (avlvwithmeta.metadata is defined and
     avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
