@@ -11,7 +11,7 @@ driver:
 lint: yamllint . && flake8 && ansible-lint --exclude=meta
 platforms:
   - name: Fedora-Molecule-Volumes-VB
-    box: fedora/31-cloud-base
+    box: fedora/33-cloud-base
     cpus: 2
     memory: 2048
     provider_override_args:
