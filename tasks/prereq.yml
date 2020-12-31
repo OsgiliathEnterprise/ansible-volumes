@@ -1,0 +1,17 @@
+---
+
+- name: ansible-volumes | install prerequisite
+  package:
+    name: xfsprogs
+    state: present
+  become: true
+  loop: "{{ lookup('subelements', lvm_groups, 'lvmetanames', {'skip_missing': True}, wantlist=True) }}"
+  loop_control:
+    loop_var: lv
+  when:
+    - lv.1 is defined
+    - lv.1 != "None"
+    - lv.1.filesystem is defined
+    - lv.1.filesystem == "xfs"
+    - lv.1.create is defined
+    - lv.1.create|bool

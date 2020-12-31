@@ -1,6 +1,8 @@
 ---
 # tasks file for lvm
 
+- include: prereq.yml
+
 - name: ansible-volumes | loop over vgs
   include_tasks: vg.yml
   loop: "{{ lvm_groups }}"
