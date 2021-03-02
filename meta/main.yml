@@ -1,5 +1,6 @@
 galaxy_info:
-  author: Charlie Mordant
+  role_name: ansible_volumes
+  author: OsgiliathEnterprise
   description: Wrapper role letting you to create PV, LV, thinpools and pool metadata.
   company: Osgiliath Corp.
 

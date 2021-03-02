@@ -1,6 +1,5 @@
 ---
 # This is a basic workflow to help you get started with Actions
-
 name: Molecule
 
 # Controls when the action will run. Triggers the workflow on push or pull request
@@ -21,21 +20,41 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: install lint prerequisite
+      - name: add vagrant apt key
         run: |
-          sudo apt-get update
-          sudo apt -y install python3-setuptools ansible-lint vagrant
-
-      - name: Install molecule
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+      - name: add vagrant apt repository
+        run: |
+          sudo apt-add-repository -y "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+      - name: update apt
         run: |
           sudo apt update
-          sudo apt -y install python3-setuptools python3 python3-pip
-          sudo pip3 install wheel
-          sudo pip3 install molecule testinfra yamllint ansible-lint flake8 molecule-vagrant
-
+#      - name: apt upgrade
+#        run: |
+#          sudo apt upgrade
+      - name: install molecule apt prerequisite
+        run: |
+          sudo apt -y install bridge-utils dnsmasq-base ebtables libvirt-dev qemu-kvm libvirt-daemon-system libvirt-daemon libvirt-clients qemu-utils ruby-dev ca-certificates curl gcc iproute2 sudo rustc vagrant python3 python3-pip python3-setuptools cpu-checker
+      - name: start libvirtd
+        run: |
+          sudo systemctl restart libvirtd
+      - name: chmod libvirt socket
+        run: |
+          sudo chmod o+rwx /var/run/libvirt/libvirt-sock
+      - name: vagrant install packages
+        run: |
+          vagrant plugin install vagrant-libvirt
+      - name: pip install packages
+        run: |
+          sudo pip3 install wheel setuptools-rust netaddr
+          sudo pip3 install pyopenssl python-vagrant yamllint testinfra flake8 ansible ansible-lint molecule molecule-vagrant
+          sudo pip3 install -U PyYAML
+#      - name: Test KVM conditions fails
+#        run: |
+#          sudo kvm-ok
       - name: molecule lint
         run: |
           molecule lint
@@ -45,51 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - name: install prereq
         run: |
-          ansible-galaxy collection install -r requirements.yml
           ansible-galaxy role install -r requirements.yml
-
-#  molecule:
-
-#    runs-on: ubuntu-latest
-#    if: "false"
-    # VT not enabled for github actions at the time writing
-#    steps:
-#      - uses: actions/checkout@v2
-
-#      - name: refresh repositories
-#        env:
-#          DEBIAN_FRONTEND: noninteractive
-#        run: |
-#          sudo apt-get update
-
-#      - name: install virtualization stack
-#        run: |
-#          sudo apt -y install bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev
-
-#      - name: install vagrant
-#        env:
-#          VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT: 1
-#        run: |
-#          wget https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb
-#          sudo apt -y install ./vagrant_2.2.7_x86_64.deb
-#          sudo vagrant plugin install vagrant-persistent-storage
-#          sudo vagrant plugin install vagrant-libvirt
-
-#      - name: Install molecule
-#        run: |
-#          sudo apt-get -y purge python3-openssl && sudo apt-get -y autoremove
-#          sudo apt-get update && sudo apt-get install -y ca-certificates curl gcc iproute2 python3 python3-dev sudo
-#          curl -skL https://bootstrap.pypa.io/get-pip.py | sudo -H python3
-#          sudo pip3 install wheel
-#          sudo pip3 install netaddr python-vagrant yamllint testinfra flake8
-#          sudo pip3 install ansible ansible-lint
-#          sudo pip3 install -I molecule molecule-vagrant
-#          echo $PATH
-
-#      - name: test molecule on vm
-#        run: |
-#          PATH=/home/runner/.local/bin:$PATH bash -c 'sudo molecule test --scenario-name kvm'
