@@ -14,6 +14,3 @@
   loop: "{{ nfs_mountpoints }}"
   loop_control:
     loop_var: nfs_server
-
-
-

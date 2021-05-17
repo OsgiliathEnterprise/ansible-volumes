@@ -1,4 +1,13 @@
 ---
+- name: ansible-volumes | nfs-entry | ensure mountpoint exists
+  file:
+    path: "{{ lvm.mntp }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  failed_when: False
+  become: true
 
 - name: ansible-volumes | nfs-entry | add mountpoint in export file
   ansible.builtin.lineinfile:
