@@ -1,5 +1,6 @@
 testinfra_hosts = ["consumer.osgiliath.test"]
 
+
 def test_nfs_is_mounted(host):
     with host.sudo():
         command = r"""df -h | \
