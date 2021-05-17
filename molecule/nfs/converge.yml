@@ -1,0 +1,41 @@
+---
+- name: Expose NFS
+  hosts: datastore.osgiliath.test
+  vars:
+    preferred_nic: "eth1"
+    company_domain: osgiliath.test
+    lvm_groups:
+      - vgname: non-persistent
+        disks:
+          - /dev/sdb1
+        create: true
+        lvmetanames:
+          - lvname: nfs_exposed
+            size: 4M
+            create: true
+            filesystem: xfs
+            expose_nfs: True
+            mntp: /var/nfs
+            mount: true
+    manage_lvm: true
+    configure_nfs: True
+  tasks:
+    - name: "Include ansible-volumes"
+      include_role:
+        name: "ansible-volumes"
+
+- name: Consume NFS
+  hosts: consumer.osgiliath.test
+  vars:
+    preferred_nic: "eth1"
+    company_domain: osgiliath.test
+    configure_nfs: True
+    nfs_mountpoints:
+      - host: datastore.osgiliath.test
+        mountpoints:
+         - remote: /var/nfs
+           local: /net
+  tasks:
+    - name: "Include ansible-volumes"
+      include_role:
+        name: "ansible-volumes"

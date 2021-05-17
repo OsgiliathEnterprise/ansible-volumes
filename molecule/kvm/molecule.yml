@@ -2,6 +2,8 @@
 dependency:
   name: galaxy
   options:
+    requirements-file: requirements-collections.yml
+    collections-path: ../community-collections
     role-file: requirements.yml
     roles-path: ../community
 driver:

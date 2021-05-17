@@ -1,0 +1,19 @@
+---
+- name: ansible-volumes | nfs-server | nfs-util
+  ansible.builtin.package:
+    name:
+     - nfs-utils
+    state: present
+  become: true
+
+- name: ansible-volumes | nfs-client | nfs common
+  ansible.builtin.include_tasks: nfs-common.yml
+
+- name: ansible-volumes | nfs-client | iterate over mountpoints
+  ansible.builtin.include_tasks: nfs-host-mountpoint.yml
+  loop: "{{ nfs_mountpoints }}"
+  loop_control:
+    loop_var: nfs_server
+
+
+

@@ -29,9 +29,10 @@
       changed_when: false
       register: result
 
-    - debug:
+    - name: "debug result"
+      debug:
         var: result
 
-    - name: "Include lvm"
+    - name: "Include ansible-volumes"
       include_role:
         name: "ansible-volumes"

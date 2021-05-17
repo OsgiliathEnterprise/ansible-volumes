@@ -1,18 +1,18 @@
 ---
 
-- name: ansible-volumes | check {{ avlv.lvname }} already converted
+- name: ansible-volumes | lv | check {{ avlv.lvname }} already converted
   shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
   become: true
   register: alreadyhasmetadata
   ignore_errors: true
   changed_when: no
 
-- name: ansible-volumes | debug alreadyhasmetadata variable
+- name: ansible-volumes | lv | debug alreadyhasmetadata variable
   debug:
     var: alreadyhasmetadata
     verbosity: 1
 
-- name: ansible-volumes | find if {{ avlv.lvname }} already converted to metadata pool
+- name: ansible-volumes | lv | find if {{ avlv.lvname }} already converted to metadata pool
   shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlvwithmeta.lvname }}_tmeta'"
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
@@ -27,14 +27,14 @@
     avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
     )
 
-- name: ansible-volumes | debug alreadyaremetadata variable
+- name: ansible-volumes | lv | debug alreadyaremetadata variable
   debug:
     var: alreadyaremetadata
     verbosity: 1
   when: >
     alreadyaremetadata is defined
 
-- name: ansible-volumes | include manage_lvm role
+- name: ansible-volumes | lv | include manage_lvm role
   include_role:
     name: tcharl.ansible_manage_lvm
   vars:

@@ -1,21 +1,41 @@
 ---
 # tasks file for lvm
 
-- include: prereq.yml
+- name: ansible-volumes | include prerequisites
+  ansible.builtin.include: prereq.yml
 
 - name: ansible-volumes | loop over vgs
-  include_tasks: vg.yml
+  ansible.builtin.include_tasks: vg.yml
   loop: "{{ lvm_groups }}"
   loop_control:
     loop_var: avvg
-  when: >
-    manage_lvm is defined and
-    manage_lvm
+  when:
+   - lvm_groups is defined
+   - manage_lvm is defined
+   - manage_lvm
 
-- include: autoextends.yml
+- name: ansible-volumes | configure autoextends
+  ansible.builtin.include_tasks: autoextends.yml
   loop: "{{ lvm_groups }}"
   loop_control:
     loop_var: avvg
-  when: >
-    manage_lvm is defined and
-    manage_lvm
+  when:
+   - lvm_groups is defined
+   - manage_lvm is defined
+   - manage_lvm
+
+- name: ansible-volumes | network file system server
+  ansible.builtin.include_tasks: nfs-server.yml
+  when:
+    - lvm_groups is defined
+    - q('subelements', lvm_groups, 'lvmetanames', {'skip_missing': True}) | selectattr('expose_nfs', 'defined') | selectattr('expose_nfs', 'equalto', True) | length > 0
+    - configure_nfs is defined
+    - configure_nfs
+
+- name: ansible-volumes | network file system client
+  ansible.builtin.include_tasks: nfs-client.yml
+  when:
+    - nfs_mountpoints is defined
+    - nfs_mountpoints | length > 0
+    - configure_nfs is defined
+    - configure_nfs

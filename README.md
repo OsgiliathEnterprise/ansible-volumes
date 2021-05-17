@@ -64,6 +64,8 @@ Full example
     manage_lvm: true
 ```
 
+Also configures NFS server, but only if the machine is protected by Kerberos (see tcharl.ansible_securehost in order to configure it)
+
 
 Dependencies
 ------------

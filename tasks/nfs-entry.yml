@@ -1,0 +1,13 @@
+---
+
+- name: ansible-volumes | nfs-entry | add mountpoint in export file
+  ansible.builtin.lineinfile:
+    path: /etc/exports
+    regexp: '^{{ lvm.mntp }}'
+    insertbefore: BOF
+    line: '{{ lvm.mntp }} *(rw,sec=krb5p)'
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  changed_when: false
