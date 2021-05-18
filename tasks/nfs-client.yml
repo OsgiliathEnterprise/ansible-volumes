@@ -24,6 +24,7 @@
   with_items:
     - { regexp: '^krb5_renewable_lifetime = 50d', line: 'krb5_renewable_lifetime = 50d' }
     - { regexp: '^krb5_renew_interval = 3600', line: 'krb5_renew_interval = 3600' }
+  become: true
 
 - name: ansible-volumes | nfs-client | restart sssd after modifications
   ansible.builtin.systemd:
