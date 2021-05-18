@@ -35,7 +35,7 @@
 
 - name: ansible-volumes | nfs-server | install {{ keytab }}
   shell: |
-    echo {{ company_realm_password }}| kinit admin
+    set -o pipefail && echo {{ company_realm_password }} | kinit admin
     ipa-getkeytab -s {{ groups[idm_group][0] }} -p nfs/{{ ns_hostname | default(machine_hostname.stdout) }} -k {{ keytab_path }}
   register: get_keytab
   when: (not keytab_stat.stat.exists) or (validate_keytab.rc)

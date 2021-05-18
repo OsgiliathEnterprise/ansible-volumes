@@ -53,7 +53,7 @@
     ipaadmin_password: "{{ company_realm_password }}"
     name: nfs/{{ nfs_server.host }}
     allow_retrieve_keytab_host:
-      - "{{ ns_hostname | default(machine_hostname.stdout)}}"
+      - "{{ ns_hostname | default(machine_hostname.stdout) }}"
     action: member
   delegate_to: "{{ groups[idm_group][0] }}"
 

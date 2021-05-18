@@ -14,3 +14,20 @@
   loop: "{{ nfs_mountpoints }}"
   loop_control:
     loop_var: nfs_server
+
+- name: ansible-volumes | nfs-client | configure kerb ticket auto renewal
+  ansible.builtin.lineinfile:
+    path: /etc/sssd/sssd.conf
+    regexp: "{{ item.regexp }}"
+    insertafter: '^\[domain/{{ company_domain }}\]'
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^krb5_renewable_lifetime = 50d', line: 'krb5_renewable_lifetime = 50d' }
+    - { regexp: '^krb5_renew_interval = 3600', line: 'krb5_renew_interval = 3600' }
+
+- name: ansible-volumes | nfs-client | restart sssd after modifications
+  ansible.builtin.systemd:
+    name: "sssd"
+    state: restarted
+    enabled: true
+  become: true
