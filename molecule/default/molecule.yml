@@ -10,7 +10,7 @@ driver:
   name: vagrant
   provider:
     name: virtualbox
-lint: yamllint . && flake8 && ansible-lint --exclude=meta
+lint: yamllint . && flake8 && ansible-lint --exclude=meta,.cache
 platforms:
   - name: Fedora-Molecule-Volumes-VB
     box: fedora/33-cloud-base

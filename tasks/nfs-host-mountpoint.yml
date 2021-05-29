@@ -20,6 +20,15 @@
   failed_when: false
   changed_when: false
 
+- name: ansible-volumes | nfs-host-mountpoint | check ip and hostname is in hostfile
+  shell: >
+    set -o pipefail &&
+    cat /etc/hosts | egrep -c '{{ datastore_ip.msg.replace('\.', '\\.') }}.*{{ nfs_server.host.replace('\.', '\\.') }}'
+  register: hosts_entry_exists
+  ignore_errors: true
+  failed_when: false
+  changed_when: false
+
 - name: ansible-volumes | nfs-host-mountpoint | add host in hosts file if ip entry exists
   ansible.builtin.lineinfile:
     path: /etc/hosts
@@ -33,6 +42,7 @@
   when:
     - hosts_ip_entry_exists.rc == 0
     - hosts_ip_entry_exists.stdout != 0
+    - hosts_entry_exists.rc == 1 or hosts_entry_exists.stdout == 0
 
 - name: ansible-volumes | nfs-host-mountpoint | add host in hosts file if ip_entry does not exist
   ansible.builtin.lineinfile:
@@ -53,7 +63,7 @@
     ipaadmin_password: "{{ company_realm_password }}"
     name: nfs/{{ nfs_server.host }}
     allow_retrieve_keytab_host:
-      - "{{ ns_hostname | default(machine_hostname.stdout) }}"
+      - "{{ hostname | default(machine_hostname.stdout) }}"
     action: member
   delegate_to: "{{ groups[idm_group][0] }}"
 

@@ -2,35 +2,32 @@
 dependency:
   name: galaxy
   options:
-    requirements-file: requirements-collections.yml
-    collections-path: ../community-collections
     role-file: requirements.yml
     roles-path: ../community
+    requirements-file: requirements-collections.yml
+    collections-path: ../community-collections
 driver:
   name: vagrant
   provider:
-    name: virtualbox
+    name: libvirt
 lint: yamllint . && flake8 && ansible-lint --exclude=meta,.cache
 platforms:
   - name: consumer.osgiliath.test
     box: tcharl/fedora-33-cgroupv1
     provider_options:
+      driver: '"kvm"'
       cpus: 2
-      memory: 3096
+      memory: 2048
     interfaces:
       - auto_config: true
         network_name: private_network
         type: dhcp
     groups:
       - ipaservers
-    instance_raw_config_args:
-      - "cache.enable :dnf"
-      - "cache.auto_detect = false"
-    provider_raw_config_args:
-      - "customize ['storagectl', :id, '--name', 'IDE Controller', '--hostiocache', 'on']"
   - name: datastore.osgiliath.test
     box: tcharl/fedora-33-cgroupv1
     provider_options:
+      driver: '"kvm"'
       cpus: 2
       memory: 2048
     interfaces:
@@ -39,19 +36,16 @@ platforms:
         type: dhcp
     groups:
       - ipaclients
-    instance_raw_config_args:
-      - "cache.enable :dnf"
-      - "cache.auto_detect = false"
     provider_raw_config_args:
-      - "customize ['storagectl', :id, '--name', 'IDE Controller', '--hostiocache', 'on']"
-    provider_override_args:
-      - "persistent_storage.enabled = true"
-      - "persistent_storage.location = 'molecule-volumes.vdi'"
-      - "persistent_storage.size = 100"
-      - "persistent_storage.mount = false"
-      - "persistent_storage.diskdevice = '/dev/sdb'"
+      - "storage :file, :size => '1G', :device => 'vdb'"
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      forks: 20
+    ssh_connection:
+      pipelining: true
+      ssh_args: -o ControlMaster=auto -o ControlPersist=600s
   env:
     ANSIBLE_ROLES_PATH: ${ANSIBLE_ROLES_PATH}:../../../community
     ANSIBLE_COLLECTIONS_PATH: ${ANSIBLE_COLLECTIONS_PATH}:../community-collections
@@ -62,10 +56,10 @@ verifier:
   options:
     v: 1
 scenario:
-  name: nfs
+  name: nfskvm
   test_sequence:
-    - lint
     - dependency
+    - lint
     - cleanup
     - destroy
     - syntax

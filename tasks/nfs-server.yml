@@ -2,43 +2,43 @@
 - name: ansible-volumes | nfs-server | configure ipa client
   ansible.builtin.import_role:
     name: tcharl.ansible_securehost
+  when: standalone_role
 
 - name: ansible-volumes | nfs-server | configure nfs service
   freeipa.ansible_freeipa.ipaservice:
     ipaadmin_password: "{{ company_realm_password }}"
-    name: nfs/{{ ns_hostname | default(machine_hostname.stdout) }}
+    name: nfs/{{ hostname | default(machine_hostname.stdout) }}
     force: false
   delegate_to: "{{ groups[idm_group][0] }}"
 
 - name: ansible-volumes | nfs-server | allows nfs server to get keytab
   freeipa.ansible_freeipa.ipaservice:
     ipaadmin_password: "{{ company_realm_password }}"
-    name: nfs/{{ ns_hostname | default(machine_hostname.stdout) }}
+    name: nfs/{{ hostname | default(machine_hostname.stdout) }}
     allow_retrieve_keytab_host:
-      - "{{ ns_hostname | default(machine_hostname.stdout) }}"
+      - "{{ hostname | default(machine_hostname.stdout) }}"
     action: member
   delegate_to: "{{ groups[idm_group][0] }}"
 
 - name: ansible-volumes | nfs-server | check if {{ keytab.value.keytab }} exists
-  stat:
+  ansible.builtin.stat:
     path: '{{ keytab_path }}'
   register: keytab_stat
 
 - name: ansible-volumes | nfs-server | check kvno of keytab
-  command: kinit -k -t {{ keytab_path }} nfs/{{ ns_hostname | default(machine_hostname.stdout) }}
+  ansible.builtin.command: kinit -k -t {{ keytab_path }} nfs/{{ hostname | default(machine_hostname.stdout) }}
   register: validate_keytab
   changed_when: false
-  failed_when:
-    - validate_keytab.rc > 1
+  failed_when: false
   when: keytab_stat.stat.exists
   become: true
 
 - name: ansible-volumes | nfs-server | install {{ keytab }}
-  shell: |
-    set -o pipefail && echo {{ company_realm_password }} | kinit admin
-    ipa-getkeytab -s {{ groups[idm_group][0] }} -p nfs/{{ ns_hostname | default(machine_hostname.stdout) }} -k {{ keytab_path }}
+  ansible.builtin.shell: |
+    set -o pipefail && echo '{{ company_realm_password }}' | kinit admin > /dev/null
+    ipa-getkeytab -s {{ groups[idm_group][0] }} -p nfs/{{ hostname | default(machine_hostname.stdout) }} -k {{ keytab_path }}
   register: get_keytab
-  when: (not keytab_stat.stat.exists) or (validate_keytab.rc)
+  when: (not keytab_stat.stat.exists) or (validate_keytab.rc > 0)
   changed_when: "'Keytab successfully retrieved and stored in' in get_keytab.stdout"
   no_log: true
   become: true
@@ -54,7 +54,7 @@
   become: true
 
 - name: ansible-volumes | nfs | loop over entries
-  include_tasks: nfs-vgs.yml
+  ansible.builtin.include_tasks: nfs-vgs.yml
   loop: "{{ lvm_groups }}"
   loop_control:
     loop_var: vgs
