@@ -2,7 +2,7 @@
 # tasks file for lvm
 
 - name: ansible-volumes | include prerequisites
-  ansible.builtin.include: prereq.yml
+  ansible.builtin.include_tasks: prereq.yml
 
 - name: ansible-volumes | loop over vgs
   ansible.builtin.include_tasks: vg.yml

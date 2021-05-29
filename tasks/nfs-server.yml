@@ -9,6 +9,7 @@
     ipaadmin_password: "{{ company_realm_password }}"
     name: nfs/{{ hostname | default(machine_hostname.stdout) }}
     force: false
+  no_log: True
   delegate_to: "{{ groups[idm_group][0] }}"
 
 - name: ansible-volumes | nfs-server | allows nfs server to get keytab
@@ -18,6 +19,7 @@
     allow_retrieve_keytab_host:
       - "{{ hostname | default(machine_hostname.stdout) }}"
     action: member
+  no_log: True
   delegate_to: "{{ groups[idm_group][0] }}"
 
 - name: ansible-volumes | nfs-server | check if {{ keytab.value.keytab }} exists

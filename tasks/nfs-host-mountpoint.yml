@@ -65,6 +65,7 @@
     allow_retrieve_keytab_host:
       - "{{ hostname | default(machine_hostname.stdout) }}"
     action: member
+  no_log: True
   delegate_to: "{{ groups[idm_group][0] }}"
 
 - name: ansible-volumes | nfs-host-mountpoint | loop over mounpoints
