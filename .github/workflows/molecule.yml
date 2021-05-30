@@ -37,21 +37,12 @@ jobs:
 #          sudo apt upgrade
       - name: install molecule apt prerequisite
         run: |
-          sudo apt -y install bridge-utils dnsmasq-base ebtables libvirt-dev qemu-kvm libvirt-daemon-system libvirt-daemon libvirt-clients qemu-utils ruby-dev ca-certificates curl gcc iproute2 sudo rustc vagrant python3 python3-pip python3-setuptools cpu-checker
-      - name: start libvirtd
-        run: |
-          sudo systemctl restart libvirtd
-      - name: chmod libvirt socket
-        run: |
-          sudo chmod o+rwx /var/run/libvirt/libvirt-sock
-      - name: vagrant install packages
-        run: |
-          vagrant plugin install vagrant-libvirt
+          sudo apt -y install bridge-utils dnsmasq-base ebtables ruby-dev ca-certificates curl gcc iproute2 sudo rustc vagrant python3 python3-pip python3-setuptools cpu-checker
       - name: pip install packages
         run: |
-          sudo pip3 install wheel setuptools-rust netaddr
-          sudo pip3 install pyopenssl python-vagrant yamllint testinfra flake8 ansible ansible-lint molecule molecule-vagrant
-          sudo pip3 install -U PyYAML
+          pip3 install wheel setuptools-rust netaddr
+          pip3 install pyopenssl python-vagrant yamllint pytest-testinfra flake8 ansible ansible-lint molecule molecule-vagrant
+          pip3 install -U PyYAML
 #      - name: Test KVM conditions fails
 #        run: |
 #          sudo kvm-ok
