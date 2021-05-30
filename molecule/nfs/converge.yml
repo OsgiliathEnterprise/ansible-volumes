@@ -2,8 +2,8 @@
 - name: Expose NFS
   hosts: datastore.osgiliath.test
   vars:
-    preferred_nic: "eth1"
     company_domain: osgiliath.test
+    preferred_nic: "eth1"
     lvm_groups:
       - vgname: non-persistent
         disks:
