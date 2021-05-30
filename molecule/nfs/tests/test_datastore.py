@@ -20,4 +20,4 @@ def test_nfs_server_is_running(host):
     with host.sudo():
         command = """service nfs-server status | grep -c 'active'"""
         cmd = host.run(command)
-    assert '1' in cmd.stdout
+    assert int(cmd.stdout.rstrip()) >= 1
