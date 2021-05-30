@@ -4,6 +4,11 @@
     name: tcharl.ansible_securehost
   when: standalone_role
 
+- name: ansible-volumes | nfs-common | get current hostname
+  command: "hostname"
+  register: machine_hostname
+  changed_when: false
+
 - name: ansible-volumes | nfs-server | configure nfs service
   freeipa.ansible_freeipa.ipaservice:
     ipaadmin_password: "{{ company_realm_password }}"

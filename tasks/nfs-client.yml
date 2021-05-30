@@ -6,6 +6,11 @@
     state: present
   become: true
 
+- name: ansible-volumes | nfs-common | get current hostname
+  command: "hostname"
+  register: machine_hostname
+  changed_when: false
+
 - name: ansible-volumes | nfs-client | nfs common
   ansible.builtin.include_tasks: nfs-common.yml
 

@@ -1,10 +1,5 @@
 ---
 
-- name: ansible-volumes | nfs-common | get current hostname
-  command: "hostname"
-  register: machine_hostname
-  changed_when: false
-
 - name: ansible-volumes | nfs-common | automount
   command: "ipa-client-automount -U"
   failed_when: False
