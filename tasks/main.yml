@@ -24,6 +24,12 @@
    - manage_lvm is defined
    - manage_lvm
 
+- name: ansible-volumes | setup common ipa configurations
+  ansible.builtin.include_tasks: nfs-common.yml
+  when:
+    - configure_nfs is defined
+    - configure_nfs
+
 - name: ansible-volumes | network file system server
   ansible.builtin.include_tasks: nfs-server.yml
   when:

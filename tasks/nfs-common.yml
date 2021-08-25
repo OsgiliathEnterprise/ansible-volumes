@@ -1,7 +1,16 @@
 ---
 
-- name: ansible-volumes | nfs-common | automount
-  command: "ipa-client-automount -U"
-  failed_when: False
-  changed_when: False
-  become: True
+- name: ansible-volumes | nfs-server | nfs-util
+  ansible.builtin.package:
+    name:
+     - nfs-utils
+    state: present
+  become: true
+
+#- name: ansible-volumes | nfs-common | create nfsclients hostgroup
+#  freeipa.ansible_freeipa.ipahostgroup:
+#    ipaadmin_password: "{{ company_realm_password }}"
+#    name: nfsclients
+#  changed_when: False
+#  become: True
+#  delegate_to: "{{ groups[idm_group][0] }}"

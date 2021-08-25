@@ -14,7 +14,7 @@
     path: /etc/exports
     regexp: '^{{ lvm.mntp }}'
     insertbefore: BOF
-    line: '{{ lvm.mntp }} *(rw,sec=krb5p)'
+    line: '{{ lvm.mntp }} *(rw,sec=krb5:krb5i:krb5p)'
     owner: root
     group: root
     mode: '0644'

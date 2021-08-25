@@ -2,6 +2,7 @@
 - name: Expose NFS
   hosts: datastore.osgiliath.test
   vars:
+    secure_logs: false
     company_domain: osgiliath.test
     preferred_nic: "eth1"
     lvm_groups:

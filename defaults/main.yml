@@ -7,3 +7,4 @@ datastore_firewall_zone: 'public'
 company_realm_password: '123ADMin'
 keytab_path: '/etc/krb5.keytab'
 standalone_role: True
+secure_logs: Yes

@@ -1,21 +1,30 @@
 ---
-- name: ansible-volumes | nfs-server | nfs-util
-  ansible.builtin.package:
-    name:
-     - nfs-utils
-    state: present
-  become: true
+- name: ansible-volumes | nfs-client | add host to nfsclients group
+  freeipa.ansible_freeipa.ipahostgroup:
+    ipaadmin_password: "{{ company_realm_password }}"
+    host:
+      - "{{ hostname | default(volume_machine_hostname.stdout) }}"
+    hostgroup:
+      - nfsclients
+    action: member
+  failed_when: False
+  changed_when: False
+  become: True
 
-- name: ansible-volumes | nfs-common | get current hostname
-  command: "hostname"
-  register: machine_hostname
-  changed_when: false
+- name: ansible-volumes | nfs-client | iterate over mountpoints to configure automount
+  ansible.builtin.include_tasks: nfs-client-automount-conf.yml
+  loop: "{{ nfs_mountpoints }}"
+  loop_control:
+    loop_var: nfs_server
 
-- name: ansible-volumes | nfs-client | nfs common
-  ansible.builtin.include_tasks: nfs-common.yml
+- name: ansible-volumes | nfs-client | automount
+  command: "ipa-client-automount -U"
+  failed_when: False
+  changed_when: False
+  become: True
 
-- name: ansible-volumes | nfs-client | iterate over mountpoints
-  ansible.builtin.include_tasks: nfs-host-mountpoint.yml
+- name: ansible-volumes | nfs-client | iterate over mountpoints to mount
+  ansible.builtin.include_tasks: nfs-client-fstab-conf.yml
   loop: "{{ nfs_mountpoints }}"
   loop_control:
     loop_var: nfs_server

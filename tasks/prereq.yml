@@ -15,3 +15,8 @@
     - lv.1.filesystem == "xfs"
     - lv.1.create is defined
     - lv.1.create|bool
+
+- name: ansible-volumes | nfs-common | get current hostname
+  command: "hostname"
+  register: volume_machine_hostname
+  changed_when: false
