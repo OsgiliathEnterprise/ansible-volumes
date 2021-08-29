@@ -5,7 +5,7 @@
     name: xfsprogs
     state: present
   become: true
-  loop: "{{ lookup('subelements', lvm_groups, 'lvmetanames', {'skip_missing': True}, wantlist=True) }}"
+  loop: "{{ lookup('subelements', lvm_groups, 'lvmetanames', {'skip_missing': True}, wantlist=True) | unique }}"
   loop_control:
     loop_var: lv
   when:

@@ -36,7 +36,7 @@
 
 - name: ansible-volumes | lv | include manage_lvm role
   include_role:
-    name: tcharl.ansible_manage_lvm
+    name: mrlesmithjr.manage-lvm
   vars:
     lvm_groups:
       - vgname: "{{ avvg.vgname }}"
