@@ -11,6 +11,16 @@
     msg: "{{ datastore_machine.ansible_facts['ansible_' + preferred_nic].ipv4.address if preferred_nic is defined else datastore_machine.ansible_facts.ansible_default_ipv4.address | default(datastore_machine.ansible_facts.ansible_all_ipv4_addresses[0]) }}"
   register: datastore_ip
 
+- name: ansible-volumes | nfs-host-mountpoint | activate sssd autofs
+  ansible.builtin.ini_file:
+    path: /etc/sssd/sssd.conf
+    section: sssd
+    option: services
+    value: 'nss, pam, ssh, sudo, autofs'
+    backup: yes
+    state: present
+  become: yes
+
 - name: ansible-volumes | nfs-host-mountpoint | loop over mounpoints
   ansible.builtin.include_tasks: nfs-client-automount-entry.yml
   loop: "{{ nfs_server.mountpoints }}"
