@@ -1,7 +1,1 @@
----
-- name: prepare IPA
-  hosts: all
-  roles:
-    - role: tcharl.ansible_securehost
-  vars:
-    company_domain: osgiliath.test
+../nfs/prepare.yml

@@ -1,9 +1,4 @@
 ---
-- name: ansible-volumes | nfs-server | configure ipa client
-  ansible.builtin.import_role:
-    name: tcharl.ansible_securehost
-  when: standalone_role
-
 - name: ansible-volumes | nfs-server | configure nfs service
   freeipa.ansible_freeipa.ipaservice:
     ipaadmin_password: "{{ company_realm_password }}"
@@ -64,27 +59,15 @@
   changed_when: false
   become: true
 
-- name: ansible-volumes | nfs-server | install firewalld
-  become: true
-  ansible.builtin.package:
-    name: firewalld
-    state: present
-
 - name: ansible-volumes | nfs-server | enable and start firewalld
-  become: true
-  ansible.builtin.service:
-    name: firewalld
-    state: started
-    enabled: true
-
-- name: ansible-volumes | nfs-server | authorize nfs service
-  become: true
-  ansible.posix.firewalld:
-    zone: "{{ datastore_firewall_zone }}"
-    permanent: true
-    immediate: true
-    service: "{{ item }}"
-    state: enabled
-  with_items:
-    - "nfs"
-    - "mountd"
+  ansible.builtin.include_role:
+    name: tcharl.ansible_routing
+  vars:
+    ansible_become: true
+    firewalld_zones:
+      - name: "{{ datastore_firewall_zone }}"
+        enabled_services:
+          - service: nfs
+          - service: mountd
+  tags:
+    - standalone

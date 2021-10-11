@@ -1,0 +1,5 @@
+---
+- name: ansible-volumes | nfs-requirements | configure ipa client
+  ansible.builtin.import_role:
+    name: tcharl.ansible_securehost
+  become: true

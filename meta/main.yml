@@ -3,6 +3,7 @@ galaxy_info:
   author: OsgiliathEnterprise
   description: Wrapper role letting you to create PV, LV, thinpools and pool metadata.
   company: Osgiliath Corp.
+  namespace: tcharl
 
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value

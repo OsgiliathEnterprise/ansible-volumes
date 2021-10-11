@@ -36,4 +36,4 @@
   tasks:
     - name: "Include ansible-volumes"
       include_role:
-        name: "ansible-volumes"
+        name: tcharl.ansible_volumes

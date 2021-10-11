@@ -23,7 +23,7 @@
   tasks:
     - name: "Include ansible-volumes"
       include_role:
-        name: "ansible-volumes"
+        name: tcharl.ansible_volumes
 
 - name: Consume NFS
   hosts: consumer.osgiliath.test
@@ -39,4 +39,4 @@
   tasks:
     - name: "Include ansible-volumes"
       include_role:
-        name: "ansible-volumes"
+        name: tcharl.ansible_volumes

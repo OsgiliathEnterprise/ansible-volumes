@@ -1,6 +1,6 @@
 ---
 
-- name: ansible-volumes | nfs-server | nfs-util
+- name: ansible-volumes | nfs-deps | nfs-util
   ansible.builtin.package:
     name:
      - nfs-utils

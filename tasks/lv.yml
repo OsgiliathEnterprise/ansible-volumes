@@ -31,8 +31,7 @@
   debug:
     var: alreadyaremetadata
     verbosity: 1
-  when: >
-    alreadyaremetadata is defined
+  when: alreadyaremetadata is defined
 
 - name: ansible-volumes | lv | include manage_lvm role
   include_role:
