@@ -7,7 +7,7 @@
     group: root
     mode: 0755
   failed_when: False
-  become: true
+  become: True
 
 - name: ansible-volumes | nfs-entry | add mountpoint in export file
   ansible.builtin.lineinfile:
@@ -18,5 +18,5 @@
     owner: root
     group: root
     mode: '0644'
-  become: true
-  changed_when: false
+  become: True
+  changed_when: False

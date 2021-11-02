@@ -4,7 +4,7 @@
   setup:
   register: datastore_machine
   delegate_facts: true
-  delegate_to: "{{ nfs_server.host }}" # TODO concat all masters IPs
+  delegate_to: "{{ nfs_server.host_ansible_host | default(nfs_server.host) }}" # TODO concat all masters IPs
 
 - name: ansible-volumes | nfs-host-mountpoint | compute ip if preferred_nic is not set
   ansible.builtin.debug:
