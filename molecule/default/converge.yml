@@ -38,7 +38,5 @@
     - name: "debug result"
       debug:
         var: result
-
-    - name: "Include ansible-volumes"
-      include_role:
-        name: tcharl.ansible_volumes
+  roles:
+    - role: tcharl.ansible_volumes

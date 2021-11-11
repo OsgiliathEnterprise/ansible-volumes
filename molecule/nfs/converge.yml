@@ -20,10 +20,8 @@
             mount: true
     manage_lvm: true
     configure_nfs: True
-  tasks:
-    - name: "Include ansible-volumes"
-      include_role:
-        name: tcharl.ansible_volumes
+  roles:
+    - role: tcharl.ansible_volumes
 
 - name: Consume NFS
   hosts: consumer.osgiliath.test
@@ -36,7 +34,5 @@
         mountpoints:
          - remote: /var/nfs
            local: /net
-  tasks:
-    - name: "Include ansible-volumes"
-      include_role:
-        name: tcharl.ansible_volumes
+  roles:
+    - role: tcharl.ansible_volumes
