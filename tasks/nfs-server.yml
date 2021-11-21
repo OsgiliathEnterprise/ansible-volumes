@@ -71,3 +71,9 @@
           - service: mountd
   tags:
     - standalone
+
+- name: ansible-volumes | nfs-server | automount
+  command: "ipa-client-automount -U"
+  failed_when: False
+  changed_when: False
+  become: True

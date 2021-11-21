@@ -23,6 +23,20 @@
   changed_when: False
   become: True
 
+- name: ansible-volumes | nfs-client | disable autofs # TODO test regularly if mountpoint works...
+  ansible.builtin.systemd:
+    name: "autofs"
+    state: stopped
+    enabled: false
+  become: true
+
+- name: ansible-volumes | nfs-client | iterate over mountpoints to configure automount
+  ansible.builtin.include_tasks: nfs-client-fstab-conf.yml
+  loop: "{{ nfs_mountpoints }}"
+  loop_control:
+    loop_var: nfs_server
+
+
 - name: ansible-volumes | nfs-client | configure kerb ticket auto renewal
   ansible.builtin.lineinfile:
     path: /etc/sssd/sssd.conf
