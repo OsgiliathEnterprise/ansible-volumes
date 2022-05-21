@@ -1,24 +1,24 @@
 ---
 # tasks file for lvm
 - name: ansible-volumes | debug vg variable
-  debug:
+  ansible.builtin.debug:
     var: avvg
     verbosity: 1
 
 - name: ansible-volumes | debug lv variable
-  debug:
+  ansible.builtin.debug:
     var: avlv
     verbosity: 1
 
 - name: ansible-volumes | check already converted
-  shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
+  ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
   become: yes
   register: metadataalreadybound
   ignore_errors: true
   changed_when: no
 
 - name: ansible-volumes | unmounting filesystem(s) before converting to thinpool
-  mount:
+  ansible.posix.mount:
     path: "{{ avlv.mntp }}"
     src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
     fstype: "{{ avlv.filesystem | default(omit) }}"
@@ -31,12 +31,12 @@
     )
 
 - name: ansible-volumes | convert thinpool
-  command: lvconvert -y --zero n -c 512K --thinpool {{ avvg.vgname }}/{{ avlv.lvname }} --poolmetadata {{ avlv.metadata }}
+  ansible.builtin.command: lvconvert -y --zero n -c 512K --thinpool {{ avvg.vgname }}/{{ avlv.lvname }} --poolmetadata {{ avlv.metadata }}
   become: yes
   when: metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0
 
 - name: ansible-volumes | mounting new filesystem(s) after thinpool conversion
-  mount:
+  ansible.posix.mount:
     path: "{{ avlv.mntp }}"
     src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
     fstype: "{{ avlv.filesystem }}"

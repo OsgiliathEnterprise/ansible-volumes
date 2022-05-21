@@ -18,7 +18,7 @@
     loop_var: nfs_server
 
 - name: ansible-volumes | nfs-client | automount
-  command: "ipa-client-automount -U"
+  ansible.builtin.command: "ipa-client-automount -U"
   failed_when: False
   changed_when: False
   become: True
@@ -26,15 +26,15 @@
 - name: ansible-volumes | nfs-client | disable autofs # TODO test regularly if mountpoint works...
   ansible.builtin.systemd:
     name: "autofs"
-    state: stopped
-    enabled: false
+    state: started
+    enabled: True
   become: true
 
-- name: ansible-volumes | nfs-client | iterate over mountpoints to configure automount
-  ansible.builtin.include_tasks: nfs-client-fstab-conf.yml
-  loop: "{{ nfs_mountpoints }}"
-  loop_control:
-    loop_var: nfs_server
+#- name: ansible-volumes | nfs-client | iterate over mountpoints to configure mount in fstab (while we are not able to configure autofs)
+#  ansible.builtin.include_tasks: nfs-client-fstab-conf.yml
+#  loop: "{{ nfs_mountpoints }}"
+#  loop_control:
+#    loop_var: nfs_server
 
 
 - name: ansible-volumes | nfs-client | configure kerb ticket auto renewal

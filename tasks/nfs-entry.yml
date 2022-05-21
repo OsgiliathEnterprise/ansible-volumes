@@ -1,6 +1,6 @@
 ---
 - name: ansible-volumes | nfs-entry | ensure mountpoint exists
-  file:
+  ansible.builtin.file:
     path: "{{ lvm.mntp }}"
     state: directory
     owner: root

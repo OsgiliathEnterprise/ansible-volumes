@@ -43,7 +43,7 @@
   ansible.builtin.include_tasks: nfs-server.yml
   when:
     - lvm_groups is defined
-    - q('subelements', lvm_groups, 'lvmetanames', {'skip_missing': True}) | selectattr('expose_nfs', 'defined') | selectattr('expose_nfs', 'equalto', True) | length > 0
+    - q('subelements', lvm_groups, 'lvmetanames', { 'skip_missing': True }) | selectattr('expose_nfs', 'defined') | selectattr('expose_nfs', 'equalto', True) | length > 0
     - configure_nfs is defined
     - configure_nfs
 

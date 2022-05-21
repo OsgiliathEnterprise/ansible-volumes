@@ -2,9 +2,8 @@
 # handlers file for lvm
 
 - name: ansible-volumes | handler | reload-automount
-  shell: |
+  ansible.builtin.shell: |
     set -o pipefail && echo '{{ company_realm_password }}' | kinit admin > /dev/null
     ipa-client-automount --uninstall
     ipa-client-automount --location=default -U
-  become: yes
   listen: ansible-volumes | handler | reload-automount

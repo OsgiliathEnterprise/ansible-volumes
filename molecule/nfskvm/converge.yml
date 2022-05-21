@@ -19,7 +19,7 @@
     manage_lvm: true
     configure_nfs: True
   roles:
-    - role: tcharl.ansible_volumes
+    - role: ansible-volumes
 
 - name: Consume NFS
   hosts: consumer.osgiliath.test
@@ -32,4 +32,4 @@
          - remote: /var/nfs
            local: /net
   roles:
-    - role: tcharl.ansible_volumes
+    - role: ansible-volumes

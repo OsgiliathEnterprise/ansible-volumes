@@ -31,12 +31,12 @@
     manage_lvm: true
   tasks:
     - name: Display dev
-      command: "ls /dev"
+      ansible.builtin.command: "ls /dev"
       changed_when: false
       register: result
 
     - name: "debug result"
-      debug:
+      ansible.builtin.debug:
         var: result
   roles:
     - role: tcharl.ansible_volumes
