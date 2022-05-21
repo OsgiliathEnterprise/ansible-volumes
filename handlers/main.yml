@@ -7,3 +7,11 @@
     ipa-client-automount --uninstall
     ipa-client-automount --location=default -U
   listen: ansible-volumes | handler | reload-automount
+
+- name: ansible-volumes | handler | refresh autofs
+  ansible.builtin.service:
+    name: "autofs"
+    state: restarted
+    enabled: True
+  become: true
+  listen: ansible-volumes | handler | reload-automount
