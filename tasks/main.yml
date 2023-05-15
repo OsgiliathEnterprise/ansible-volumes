@@ -1,10 +1,10 @@
 ---
 # tasks file for lvm
 
-- name: ansible-volumes | include prerequisites
+- name: Include prerequisites
   ansible.builtin.include_tasks: prereq.yml
 
-- name: ansible-volumes | loop over vgs
+- name: Loop over vgs
   ansible.builtin.include_tasks: vg.yml
   loop: "{{ lvm_groups }}"
   loop_control:
@@ -14,7 +14,7 @@
    - manage_lvm is defined
    - manage_lvm
 
-- name: ansible-volumes | configure autoextends
+- name: Configure autoextends
   ansible.builtin.include_tasks: autoextends.yml
   loop: "{{ lvm_groups }}"
   loop_control:

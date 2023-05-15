@@ -1,6 +1,6 @@
 ---
 
-- name: ansible-volumes | install prerequisite
+- name: Prereq | Install prerequisite
   ansible.builtin.package:
     name: xfsprogs
     state: present
@@ -16,7 +16,7 @@
     - lv.1.create is defined
     - lv.1.create|bool
 
-- name: ansible-volumes | nfs-common | get current hostname
+- name: Prereq | get current hostname
   ansible.builtin.command: "hostname"
   register: volume_machine_hostname
   changed_when: false

@@ -1,16 +1,16 @@
 ---
 # tasks file for lvm
-- name: ansible-volumes | debug vg variable
+- name: Pool | Debug vg variable
   ansible.builtin.debug:
     var: avvg
     verbosity: 1
 
-- name: ansible-volumes | debug lv variable
+- name: Pool | Debug lv variable
   ansible.builtin.debug:
     var: avlv
     verbosity: 1
 
-- name: ansible-volumes | check already converted
+- name: Pool | Logical volume already converted
   ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
   become: yes
   register: metadataalreadybound

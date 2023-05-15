@@ -1,25 +1,25 @@
 ---
 # tasks file for lvm
-- name: ansible-volumes | vg | include manage_lvm role | centos
+- name: Vg | include manage_lvm role | centos
   ansible.builtin.include_role:
     name: mrlesmithjr.manage-lvm
     tasks_from: centos
   when: ansible_facts.os_family == "RedHat"
 
-- name: ansible-volumes | vg  | include manage_lvm role | deb
+- name: Vg  | include manage_lvm role | deb
   ansible.builtin.include_role:
     name: mrlesmithjr.manage-lvm
     tasks_from: debian
   when: ansible_facts.os_family == "Debian"
 
-- name: ansible-volumes | vg  | create volume for each lv
+- name: Vg  | create volume for each lv
   ansible.builtin.include_tasks: lv.yml
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
     loop_var: avlv
   when: avlv is defined and avlv != 'None'
 
-- name: ansible-volumes | vg  | create pool for each lv
+- name: Vg  | create pool for each lv
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
