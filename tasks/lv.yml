@@ -1,6 +1,6 @@
 ---
 
-- name: Lv | check {{ avlv.lvname }} already converted
+- name: Lv | check already converted {{ avlv.lvname }}
   ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
   become: true
   register: alreadyhasmetadata
@@ -12,7 +12,7 @@
     var: alreadyhasmetadata
     verbosity: 1
 
-- name: Lv | find if {{ avlv.lvname }} already converted to metadata pool
+- name: Lv | find if already converted to metadata pool {{ avlv.lvname }}
   ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlvwithmeta.lvname }}_tmeta'"
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
@@ -46,8 +46,8 @@
             opts: "{{ avlv.opts | default(omit) }}"
             create: "{{ avlv.create }}"
             filesystem: "{{ avlv.filesystem | default('None') }}"
-            mntp: "{{ avlv.mntp  | default(omit) }}"
-            mount: "{{ avlv.mount  | default(false) }}"
+            mntp: "{{ avlv.mntp | default(omit) }}"
+            mount: "{{ avlv.mount | default(false) }}"
   loop: "{{ alreadyaremetadata.results }}"
   loop_control:
     loop_var: alreadyismetadata
