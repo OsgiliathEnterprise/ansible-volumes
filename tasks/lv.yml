@@ -1,18 +1,18 @@
 ---
 
-- name: ansible-volumes | lv | check {{ avlv.lvname }} already converted
+- name: Lv | check {{ avlv.lvname }} already converted
   ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
   become: true
   register: alreadyhasmetadata
   ignore_errors: true
   changed_when: no
 
-- name: ansible-volumes | lv | debug alreadyhasmetadata variable
+- name: Lv | debug alreadyhasmetadata variable
   ansible.builtin.debug:
     var: alreadyhasmetadata
     verbosity: 1
 
-- name: ansible-volumes | lv | find if {{ avlv.lvname }} already converted to metadata pool
+- name: Lv | find if {{ avlv.lvname }} already converted to metadata pool
   ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlvwithmeta.lvname }}_tmeta'"
   loop: "{{ avvg.lvmetanames }}"
   loop_control:
@@ -21,19 +21,18 @@
   ignore_errors: true
   become: true
   changed_when: no
-  when: >
-    not avlv.metadata is defined and
-    (avlvwithmeta.metadata is defined and
-    avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
-    )
+  when:
+    - not avlv.metadata is defined
+    - avlvwithmeta.metadata is defined
+    - avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
 
-- name: ansible-volumes | lv | debug alreadyaremetadata variable
+- name: Lv | debug alreadyaremetadata variable
   ansible.builtin.debug:
     var: alreadyaremetadata
     verbosity: 1
   when: alreadyaremetadata is defined
 
-- name: ansible-volumes | lv | include manage_lvm role
+- name: Lv | include manage_lvm role
   ansible.builtin.include_role:
     name: mrlesmithjr.manage-lvm
   vars:

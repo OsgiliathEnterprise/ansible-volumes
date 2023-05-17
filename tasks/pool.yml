@@ -17,25 +17,23 @@
   ignore_errors: true
   changed_when: no
 
-- name: ansible-volumes | unmounting filesystem(s) before converting to thinpool
+- name: Pool | unmounting filesystem(s) before converting to thinpool
   ansible.posix.mount:
     path: "{{ avlv.mntp }}"
     src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
     fstype: "{{ avlv.filesystem | default(omit) }}"
     state: "absent"
   become: true
-  when: >
-    (
-    (metadataalreadybound is failed or alreadyhasmetadata.stdout == 0) and
-    (avlv.mntp is defined)
-    )
+  when:
+    - (metadataalreadybound is failed or alreadyhasmetadata.stdout == 0)
+    - avlv.mntp is defined
 
-- name: ansible-volumes | convert thinpool
+- name: Pool | convert thinpool
   ansible.builtin.command: lvconvert -y --zero n -c 512K --thinpool {{ avvg.vgname }}/{{ avlv.lvname }} --poolmetadata {{ avlv.metadata }}
   become: yes
   when: metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0
 
-- name: ansible-volumes | mounting new filesystem(s) after thinpool conversion
+- name: Pool | mounting new filesystem(s) after thinpool conversion
   ansible.posix.mount:
     path: "{{ avlv.mntp }}"
     src: "/dev/{{ avvg.vgname }}/{{ avlv.lvname }}"
@@ -43,8 +41,6 @@
     state: "mounted"
     opts: "{{ avlv.mopts | default('defaults') }}"
   become: true
-  when: >
-    (
-    (metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0) and
-    (avlv.mntp is defined)
-    )
+  when:
+    - metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0
+    - avlv.mntp is defined

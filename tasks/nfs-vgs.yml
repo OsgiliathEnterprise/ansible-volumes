@@ -1,7 +1,0 @@
----
-
-- name: ansible-volumes | nfs | loop over entries
-  ansible.builtin.include_tasks: nfs-entry.yml
-  loop: "{{ vgs.lvmetanames | selectattr('expose_nfs', 'defined') | selectattr('expose_nfs', 'equalto', True) | unique }}"
-  loop_control:
-    loop_var: lvm

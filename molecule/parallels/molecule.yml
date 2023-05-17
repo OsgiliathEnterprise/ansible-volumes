@@ -9,24 +9,29 @@ dependency:
 driver:
   name: vagrant
   provider:
-    name: libvirt
+    name: parallels
 platforms:
-  - name: Fedora-Molecule-Volumes-KVM
-    box: fedora/38-cloud-base
+  - name: Fedora-Molecule-Volumes-Parallels
+    box: tcharl/fedora-36-aarch64
     provider_options:
-      driver: "kvm"
       cpus: 2
       memory: 2048
+    interfaces:
+      - type: dhcp
+        # ip: "192.168.56.5"
+        auto_config: true
+        network_name: private_network
+        # virtualbox__intnet: "internalnetwork"
     provider_raw_config_args:
-      - "storage :file, :size => '1G', :device => 'vdb'"
+      - "customize ['set', :id, '--device-add', 'hdd', '--size', '840']"
 provisioner:
   name: ansible
-  config_options:
-    defaults:
-      forks: 20
-    ssh_connection:
-      pipelining: true
-      ssh_args: -o ControlMaster=auto -o ControlPersist=600s
+#  config_options:
+#    defaults:
+#      forks: 20
+#   ssh_connection:
+#     pipelining: true
+#      ssh_args: -o ControlMaster=auto -o ControlPersist=6000s
 verifier:
   name: testinfra
   env:
@@ -34,4 +39,4 @@ verifier:
   options:
     v: 1
 scenario:
-  name: kvm
+  name: parallels

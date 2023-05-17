@@ -2,7 +2,10 @@
 # tasks file for lvm
 
 - name: Include prerequisites
-  ansible.builtin.include_tasks: prereq.yml
+  ansible.builtin.import_tasks: prereq.yml
+
+- name: Include facts
+  ansible.builtin.include_tasks: facts.yml
 
 - name: Loop over vgs
   ansible.builtin.include_tasks: vg.yml
@@ -23,34 +26,3 @@
    - lvm_groups is defined
    - manage_lvm is defined
    - manage_lvm
-
-- name: ansible-volumes | setup common ipa configurations
-  ansible.builtin.include_tasks: nfs-deps.yml
-  when:
-    - configure_nfs is defined
-    - configure_nfs
-
-- name: ansible-volumes | nfs requirements
-  ansible.builtin.include_tasks: nfs-requirements.yml
-  when:
-    - configure_nfs is defined
-    - configure_nfs
-    - standalone_role
-  tags:
-    - standalone
-
-- name: ansible-volumes | network file system server
-  ansible.builtin.include_tasks: nfs-server.yml
-  when:
-    - lvm_groups is defined
-    - q('subelements', lvm_groups, 'lvmetanames', { 'skip_missing': True }) | selectattr('expose_nfs', 'defined') | selectattr('expose_nfs', 'equalto', True) | length > 0
-    - configure_nfs is defined
-    - configure_nfs
-
-- name: ansible-volumes | network file system client
-  ansible.builtin.include_tasks: nfs-client.yml
-  when:
-    - nfs_mountpoints is defined
-    - nfs_mountpoints | length > 0
-    - configure_nfs is defined
-    - configure_nfs

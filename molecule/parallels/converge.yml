@@ -5,7 +5,7 @@
     lvm_groups:
       - vgname: non-persistent
         disks:
-          - /dev/vdb
+          - /dev/sdb
         create: true
         lvmetanames:
           - lvname: thinpool
@@ -22,6 +22,12 @@
             size: 10%VG
             opts: "--wipesignatures y"
             create: true
+          - lvname: nfs_exposed
+            size: 4M
+            create: true
+            filesystem: xfs
+            mntp: /var/nfs
+            mount: true
     manage_lvm: true
   tasks:
     - name: Display dev

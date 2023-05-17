@@ -1,7 +1,0 @@
----
-
-- name: ansible-volumes | nfs-host-mountpoint | loop over mounpoints
-  ansible.builtin.include_tasks: nfs-client-fstab-entry.yml
-  loop: "{{ nfs_server.mountpoints }}"
-  loop_control:
-    loop_var: mounpoint

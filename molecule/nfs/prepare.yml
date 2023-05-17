@@ -1,9 +1,0 @@
----
-- name: prepare IPA
-  hosts: consumer.osgiliath.test
-  roles:
-    - role: tcharl.ansible_securehost
-  vars:
-    preferred_nic: "eth1"
-    company_domain: osgiliath.test
-    ansible_become: Yes
