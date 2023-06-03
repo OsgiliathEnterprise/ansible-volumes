@@ -12,7 +12,7 @@ driver:
     name: virtualbox
 platforms:
   - name: Fedora-Molecule-Volumes-VB
-    box: fedora/38-cloud-base
+    box: ${TESTBOX:-fedora/38-cloud-base}
     provider_options:
       cpus: 2
       memory: 2048
