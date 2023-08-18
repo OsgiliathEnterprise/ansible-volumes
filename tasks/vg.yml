@@ -2,13 +2,13 @@
 # tasks file for lvm
 - name: Vg | include manage_lvm role | centos
   ansible.builtin.include_role:
-    name: mrlesmithjr.manage-lvm
+    name: mrlesmithjr.manage_lvm
     tasks_from: centos
   when: ansible_facts.os_family == "RedHat"
 
 - name: Vg  | include manage_lvm role | deb
   ansible.builtin.include_role:
-    name: mrlesmithjr.manage-lvm
+    name: mrlesmithjr.manage_lvm
     tasks_from: debian
   when: ansible_facts.os_family == "Debian"
 

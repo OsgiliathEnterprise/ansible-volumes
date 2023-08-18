@@ -34,7 +34,7 @@
 
 - name: Lv | include manage_lvm role
   ansible.builtin.include_role:
-    name: mrlesmithjr.manage-lvm
+    name: mrlesmithjr.manage_lvm
   vars:
     lvm_groups:
       - vgname: "{{ avvg.vgname }}"
