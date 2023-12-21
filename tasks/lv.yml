@@ -1,0 +1,66 @@
+---
+
+- name: Lv | check already converted {{ avlv.lvname }}
+  ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlv.lvname }}_tmeta'"
+  become: true
+  register: alreadyhasmetadata
+  ignore_errors: true
+  changed_when: no
+
+- name: Lv | debug alreadyhasmetadata variable
+  ansible.builtin.debug:
+    var: alreadyhasmetadata
+    verbosity: 1
+
+- name: Lv | find if already converted to metadata pool {{ avlv.lvname }}
+  ansible.builtin.shell: "lvs -o metadata_lv  {{ avvg.vgname }} --separator='|' --noheadings | grep -c '{{ avlvwithmeta.lvname }}_tmeta'"
+  loop: "{{ avvg.lvmetanames }}"
+  loop_control:
+    loop_var: avlvwithmeta
+  register: alreadyaremetadata
+  ignore_errors: true
+  become: true
+  changed_when: no
+  when:
+    - not avlv.metadata is defined
+    - avlvwithmeta.metadata is defined
+    - avlvwithmeta.metadata == avvg.vgname + '/' + avlv.lvname
+
+- name: Lv | debug alreadyaremetadata variable
+  ansible.builtin.debug:
+    var: alreadyaremetadata
+    verbosity: 1
+  when: alreadyaremetadata is defined
+
+- name: Lv | include manage_lvm role
+  ansible.builtin.include_role:
+    name: mrlesmithjr.manage_lvm
+  vars:
+    lvm_groups:
+      - vgname: "{{ avvg.vgname }}"
+        disks: "{{ avvg.disks }}"
+        create: "{{ avvg.create }}"
+        lvnames:
+          - lvname: "{{ avlv.lvname }}"
+            size: "{{ avlv.size }}"
+            opts: "{{ avlv.opts | default(omit) }}"
+            create: "{{ avlv.create }}"
+            filesystem: "{{ avlv.filesystem | default('None') }}"
+            mntp: "{{ avlv.mntp | default(omit) }}"
+            mount: "{{ avlv.mount | default(false) }}"
+  loop: "{{ alreadyaremetadata.results }}"
+  loop_control:
+    loop_var: alreadyismetadata
+  when: >
+    (alreadyhasmetadata is failed or alreadyhasmetadata.rc == 1 or alreadyhasmetadata.stdout == 0) and
+    (
+    avlv.metadata is defined or
+    (
+    not alreadyismetadata.skipped is defined and
+    (
+    alreadyismetadata is failed or
+    alreadyismetadata.rc == 1 or
+    alreadyismetadata.stdout == 0
+    )
+    )
+    )

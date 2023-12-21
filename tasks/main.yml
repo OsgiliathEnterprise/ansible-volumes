@@ -1,0 +1,28 @@
+---
+# tasks file for lvm
+
+- name: Include prerequisites
+  ansible.builtin.import_tasks: prereq.yml
+
+- name: Include facts
+  ansible.builtin.include_tasks: facts.yml
+
+- name: Loop over vgs
+  ansible.builtin.include_tasks: vg.yml
+  loop: "{{ lvm_groups }}"
+  loop_control:
+    loop_var: avvg
+  when:
+   - lvm_groups is defined
+   - manage_lvm is defined
+   - manage_lvm
+
+- name: Configure autoextends
+  ansible.builtin.include_tasks: autoextends.yml
+  loop: "{{ lvm_groups }}"
+  loop_control:
+    loop_var: avvg
+  when:
+   - lvm_groups is defined
+   - manage_lvm is defined
+   - manage_lvm

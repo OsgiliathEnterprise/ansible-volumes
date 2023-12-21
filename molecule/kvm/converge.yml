@@ -1,0 +1,36 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    lvm_groups:
+      - vgname: non-persistent
+        disks:
+          - /dev/vdb
+        create: true
+        lvmetanames:
+          - lvname: thinpool
+            size: 40%VG
+            opts: "--wipesignatures y"
+            create: true
+            metadata: non-persistent/thinpoolmeta
+            autoextendtreshold: 80
+            autoextendpercent: 20
+            filesystem: xfs
+            mntp: /var/lib/docker
+            mount: true
+          - lvname: thinpoolmeta
+            size: 10%VG
+            opts: "--wipesignatures y"
+            create: true
+    manage_lvm: true
+  tasks:
+    - name: Display dev
+      ansible.builtin.command: "ls /dev"
+      changed_when: false
+      register: result
+
+    - name: "debug result"
+      ansible.builtin.debug:
+        var: result
+  roles:
+    - role: tcharl.ansible_volumes

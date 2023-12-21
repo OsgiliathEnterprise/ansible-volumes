@@ -1,0 +1,40 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements-standalone.yml
+    requirements-file: requirements-collections.yml
+driver:
+  name: vagrant
+  provider:
+    name: parallels
+platforms:
+  - name: Fedora-Molecule-Volumes-Parallels
+    box: ${TESTBOX:-bento/fedora-38-arm64}
+    provider_options:
+      cpus: 2
+      memory: 2048
+    interfaces:
+      - type: dhcp
+        # ip: "192.168.56.5"
+        auto_config: true
+        network_name: private_network
+        # virtualbox__intnet: "internalnetwork"
+    provider_raw_config_args:
+      - "customize ['set', :id, '--device-add', 'hdd', '--size', '840']"
+provisioner:
+  name: ansible
+#  config_options:
+#    defaults:
+#      forks: 20
+#   ssh_connection:
+#     pipelining: true
+#      ssh_args: -o ControlMaster=auto -o ControlPersist=6000s
+verifier:
+  name: testinfra
+  env:
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    v: 1
+scenario:
+  name: parallels

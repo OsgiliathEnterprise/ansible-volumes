@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements-standalone.yml
+    requirements-file: requirements-collections.yml
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+platforms:
+  - name: Fedora-Molecule-Volumes-VB
+    box: ${TESTBOX:-fedora/39-cloud-base}
+    provider_options:
+      cpus: 2
+      memory: 2048
+    provider_raw_config_args:
+      - "customize ['storagectl', :id, '--name', 'IDE', '--hostiocache', 'on']"
+    provider_override_args:
+      - "persistent_storage.enabled = true"
+      - "persistent_storage.location = 'molecule-volumes.vdi'"
+      - "persistent_storage.size = 100"
+      - "persistent_storage.mount = false"
+      - "persistent_storage.diskdevice = '/dev/sdb'"
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/..:${MOLECULE_PROJECT_DIRECTORY}/../community:${ANSIBLE_ROLES_PATH}"
+    ANSIBLE_COLLECTIONS_PATH: "${MOLECULE_PROJECT_DIRECTORY}/../community-collections:${ANSIBLE_COLLECTIONS_PATH}"
+verifier:
+  name: testinfra
+  env:
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
+  options:
+    v: 1

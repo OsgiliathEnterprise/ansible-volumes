@@ -1,0 +1,5 @@
+---
+# defaults file for lvm
+
+standalone_role: True
+secure_logs: Yes
