@@ -49,6 +49,7 @@
             mntp: "{{ avlv.mntp | default(omit) }}"
             mount: "{{ avlv.mount | default(false) }}"
   loop: "{{ alreadyaremetadata.results }}"
+  changed_when: true
   loop_control:
     loop_var: alreadyismetadata
   when: >

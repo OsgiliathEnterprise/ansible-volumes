@@ -4,4 +4,6 @@ exclude_paths:
  - molecule/
  - .tox/
 skip_list:
- - '106'  # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern
+ - '106'  # Role name {} does not match '^[a-z][a-z0-9_]+$' pattern
+ - var-naming[no-role-prefix]  # Role name {} does not match ^[a-z][a-z0-9_]+$ pattern
+ - galaxy[no-changelog] # A changelog file should be added

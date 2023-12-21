@@ -31,6 +31,7 @@
 - name: Pool | convert thinpool
   ansible.builtin.command: lvconvert -y --zero n -c 512K --thinpool {{ avvg.vgname }}/{{ avlv.lvname }} --poolmetadata {{ avlv.metadata }}
   become: yes
+  changed_when: true
   when: metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0
 
 - name: Pool | mounting new filesystem(s) after thinpool conversion
@@ -40,6 +41,7 @@
     fstype: "{{ avlv.filesystem }}"
     state: "mounted"
     opts: "{{ avlv.mopts | default('defaults') }}"
+  changed_when: true
   become: true
   when:
     - metadataalreadybound is failed  or alreadyhasmetadata.stdout == 0
