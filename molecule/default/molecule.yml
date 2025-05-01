@@ -1,8 +1,9 @@
 ---
 dependency:
   name: galaxy
+  enabled: ${DEPENDENCY_ENABLED:-True}
   options:
-    role-file: requirements-standalone.yml
+    role-file: ${REQUIREMENTS_PATH:-requirements.yml}
     requirements-file: requirements-collections.yml
 driver:
   name: vagrant

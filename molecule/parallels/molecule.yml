@@ -1,16 +1,17 @@
 ---
 dependency:
   name: galaxy
+  enabled: ${DEPENDENCY_ENABLED:-True}
   options:
-    role-file: requirements-standalone.yml
+    role-file: ${REQUIREMENTS_PATH:-requirements.yml}
     requirements-file: requirements-collections.yml
 driver:
   name: vagrant
   provider:
     name: parallels
 platforms:
-  - name: Fedora-Molecule-Volumes-Parallels
-    box: ${TESTBOX:-bento/fedora-38-arm64}
+  - name: volumes.osgiliath.test
+    box: ${TESTBOX:-bento/fedora-40}
     provider_options:
       cpus: 2
       memory: 2048
