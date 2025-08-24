@@ -1,13 +1,12 @@
 ---
 # tasks file for thinpool autoextends
-
 - name: Autoextends | configure lvm autoextends
   ansible.builtin.template:
     src: thinpool-profile.j2
     dest: /etc/lvm/profile/{{ avvg.vgname }}-{{ avlv.lvname }}.profile
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   become: yes
   loop: "{{ avvg.lvmetanames }}"
   loop_control:

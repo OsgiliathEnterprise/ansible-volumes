@@ -17,6 +17,6 @@ license:
   - "Apache-2.0"
 tags:
   - "volumes"
-  - "volume-groups"
-  - "logical-volumes"
+  - "volume_groups"
+  - "logical_volumes"
   - "linux"

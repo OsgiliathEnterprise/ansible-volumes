@@ -1,4 +1,5 @@
 .idea
+.ansible
 **/*/__pycache__
 .cache
 .tox
