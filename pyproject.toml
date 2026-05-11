@@ -21,9 +21,9 @@ yamllint = "*"
 tox = "*"
 pytest-testinfra = "*"
 python-vagrant = "*"
-molecule = "25.1.0"
+molecule = ">=6.0.0,<25.0"
 molecule-plugins = { version = "*", extras = ["vagrant"] }
-ansible-lint = { version = "v25.8.2", markers = "platform_system != 'Windows'" }
+ansible-lint = { version = "v26.4.0", markers = "platform_system != 'Windows'" }
 
 [build-system]
 requires = ["poetry-core"]
