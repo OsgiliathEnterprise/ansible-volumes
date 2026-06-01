@@ -32,6 +32,9 @@ provisioner:
   config_options:
     defaults:
       remote_tmp: /tmp
+    ssh_connection:
+      pipelining: true
+      ssh_args: -4 -o ControlMaster=auto -o ControlPersist=600s
 verifier:
   name: testinfra
   env:

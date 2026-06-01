@@ -30,7 +30,7 @@ provisioner:
       remote_tmp: /tmp
     ssh_connection:
       pipelining: true
-      ssh_args: -o ControlMaster=auto -o ControlPersist=600s
+      ssh_args: -4 -o ControlMaster=auto -o ControlPersist=600s
 verifier:
   name: testinfra
   env:
