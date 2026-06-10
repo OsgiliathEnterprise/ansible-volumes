@@ -16,6 +16,22 @@
     - lv.1.create is defined
     - lv.1.create|bool
 
-- name: Vg | include manage_lvm role | centos
+
+- name: Prereq | Gather current mount facts
+  ansible.builtin.mount_facts:
+    sources:
+      - dynamic
+  become: true
+
+- name: Prereq | Show detailed mount info for root filesystem
+  ansible.builtin.debug:
+    var: item
+    verbosity: 2
+  loop: "{{ ansible_facts['mount_points'].values() | list }}"
+  when: item.mount == "/"
+  loop_control:
+    label: "{{ item.mount }}"
+
+- name: Prereq | include manage_lvm role | centos
   ansible.builtin.import_role:
     name: mrlesmithjr.manage_lvm
