@@ -4,7 +4,7 @@ dist: noble
 
 language: python
 python:
-  - "3.11"
+  - "3.13"
 addons:
   apt:
     sources:
@@ -30,12 +30,12 @@ addons:
 
 install:
   - vagrant plugin install vagrant-libvirt
-  - pip install wheel pyopenssl tox
+  - pip install uv
   - sudo chmod o+rwx /var/run/libvirt/libvirt-sock
 
 script:
   - mv ../ansible-volumes ../tcharl.ansible_volumes
-  - travis_wait 30 tox -e test-exec -- --scenario-name kvm
+  - travis_wait 30 uv tool run --python 3.13 --with tox tox -e test-exec -- --scenario-name kvm
 branches:
   only:
     - master
