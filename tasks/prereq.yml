@@ -20,7 +20,7 @@
 - name: Prereq | Gather current mount facts
   ansible.builtin.mount_facts:
     sources:
-      - dynamic
+      - all
   become: true
 
 - name: Prereq | Show detailed mount info for root filesystem
