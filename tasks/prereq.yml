@@ -16,7 +16,15 @@
     - lv.1.create is defined
     - lv.1.create|bool
 
+- name: Display dev
+  ansible.builtin.command: "ls /dev"
+  changed_when: false
+  register: volume_devices
 
+- name: Prereq | Show devices
+  ansible.builtin.debug:
+    var: volume_devices
+    verbosity: 2
 - name: Prereq | Gather current mount facts
   ansible.builtin.mount_facts:
     sources:
