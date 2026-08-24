@@ -23,7 +23,7 @@
             opts: "--wipesignatures y"
             create: true
           - lvname: nfs_exposed
-            size: 4M
+            size: 512M
             create: true
             filesystem: xfs
             mntp: /var/nfs
