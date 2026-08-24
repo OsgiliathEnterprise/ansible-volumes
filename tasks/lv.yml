@@ -51,16 +51,5 @@
   loop: "{{ alreadyaremetadata.results }}"
   loop_control:
     loop_var: alreadyismetadata
-  when: >
-    (alreadyhasmetadata is failed or alreadyhasmetadata.rc == 1 or alreadyhasmetadata.stdout == 0) and
-    (
-    avlv.metadata is defined or
-    (
-    not alreadyismetadata.skipped is defined and
-    (
-    alreadyismetadata is failed or
-    alreadyismetadata.rc == 1 or
-    alreadyismetadata.stdout == 0
-    )
-    )
-    )
+  when:
+    - alreadyhasmetadata is failed or alreadyhasmetadata.rc == 1 or alreadyhasmetadata.stdout == 0
