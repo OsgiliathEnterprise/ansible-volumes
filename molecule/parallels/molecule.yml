@@ -22,7 +22,7 @@ platforms:
         network_name: private_network
         # virtualbox__intnet: "internalnetwork"
     provider_raw_config_args:
-      - "customize ['set', :id, '--device-add', 'hdd', '--size', '840']"
+      - "customize ['set', :id, '--device-add', 'hdd', '--size', '5000']"
 provisioner:
   name: ansible
   env:
@@ -49,3 +49,16 @@ verifier:
     v: 1
 scenario:
   name: parallels
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

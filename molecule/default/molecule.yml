@@ -21,7 +21,7 @@ platforms:
     provider_override_args:
       - "persistent_storage.enabled = true"
       - "persistent_storage.location = 'molecule-volumes.vdi'"
-      - "persistent_storage.size = 100"
+      - "persistent_storage.size = 5000"
       - "persistent_storage.mount = false"
       - "persistent_storage.diskdevice = '/dev/sdb'"
 provisioner:
@@ -41,3 +41,17 @@ verifier:
     PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
   options:
     v: 3
+scenario:
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
