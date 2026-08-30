@@ -32,6 +32,16 @@
     verbosity: 1
   when: alreadyaremetadata is defined
 
+- name: "Lv | ensure mountpoint directory exists {{ avlv.mntp | default('none') }}"
+  ansible.builtin.file:
+    path: "{{ avlv.mntp }}"
+    state: directory
+    mode: "0755"
+  become: true
+  when:
+    - avlv.mntp is defined
+    - avlv.mntp != 'None'
+
 - name: Lv | include manage_lvm role
   ansible.builtin.include_role:
     name: mrlesmithjr.manage_lvm
@@ -47,7 +57,10 @@
             create: "{{ avlv.create }}"
             filesystem: "{{ avlv.filesystem | default('None') }}"
             mntp: "{{ avlv.mntp | default(omit) }}"
-            mount: "{{ avlv.mount | default(false) }}"
+            mount: >-
+              {{ (avlv.mount if avlv.mount is defined else
+                  ((avlv.mntp is defined and avlv.mntp != 'None') and
+                   (avlv.filesystem | default('None') not in ('None', 'swap')))) }}
   loop: "{{ alreadyaremetadata.results }}"
   loop_control:
     loop_var: alreadyismetadata

@@ -55,3 +55,29 @@ def test_formating_is_xfs(host):
 
 def test_xfs_volume_is_mounted(host):
     host.file("/var/lib/docker").mode == 0o731
+
+
+def test_nested_mountpoint_directory_exists(host):
+    command = """sudo test -d /var/vfs/volume"""
+    cmd = host.run(command)
+    assert cmd.rc == 0
+
+
+def test_nested_xfs_volume_is_mounted(host):
+    command = """cat /proc/mounts | grep -c '/var/vfs/volume'"""
+    cmd = host.run(command)
+    assert '1' in cmd.stdout
+
+
+def test_nested_xfs_formatting_is_xfs(host):
+    command = """sudo xfs_info /dev/non-persistent/nfs_nested \
+    | grep -c 'ftype=1'"""
+    cmd = host.run(command)
+    assert '1' in cmd.stdout
+
+
+def test_nested_mountpoint_is_writable(host):
+    command = """echo nested-test | sudo tee /var/vfs/volume/.nested_test \
+    >/dev/null && cat /var/vfs/volume/.nested_test"""
+    cmd = host.run(command)
+    assert 'nested-test' in cmd.stdout

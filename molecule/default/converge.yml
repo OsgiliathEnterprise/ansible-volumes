@@ -28,6 +28,12 @@
             filesystem: xfs
             mntp: /var/nfs
             mount: true
+          # no explicit mount key on purpose: exercises the default-mount behavior
+          - lvname: nfs_nested
+            size: 512M
+            create: true
+            filesystem: xfs
+            mntp: /var/vfs/volume
     manage_lvm: true
   tasks:
     - name: Display dev
