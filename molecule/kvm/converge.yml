@@ -24,7 +24,7 @@
             create: true
           # no explicit mount key on purpose: exercises the default-mount behavior
           - lvname: nfs_nested
-            size: 512M
+            size: 1G
             create: true
             filesystem: xfs
             mntp: /var/vfs/volume
